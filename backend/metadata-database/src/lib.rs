@@ -7,6 +7,7 @@ mod models;
 
 pub use sea_orm::DbErr;
 
+#[derive(Clone)]
 pub struct MetadataDatabase {
     conn: DatabaseConnection,
 }

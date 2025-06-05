@@ -12,6 +12,7 @@ impl MigrationTrait for Migration {
                     .table(GeneratedProduct::Table)
                     .if_not_exists()
                     .col(pk_uuid(GeneratedProduct::Id))
+                    .col(string(GeneratedProduct::Name))
                     .col(string(GeneratedProduct::MimeType))
                     .col(string_null(GeneratedProduct::PositivePrompt))
                     .col(string_null(GeneratedProduct::NegativePrompt))
@@ -40,6 +41,7 @@ impl MigrationTrait for Migration {
 pub enum GeneratedProduct {
     Table,
     Id,
+    Name,
     MimeType,
     PositivePrompt,
     NegativePrompt,

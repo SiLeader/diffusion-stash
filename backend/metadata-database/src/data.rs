@@ -2,6 +2,8 @@ use crate::entity::sea_orm_active_enums::{ModelCategoryEnum, ModelTypeEnum};
 use crate::entity::{ai_model, generated_product};
 use sea_orm::prelude::{DateTimeUtc, Uuid};
 use serde::{Deserialize, Serialize};
+use std::fmt::Display;
+use std::mem::Discriminant;
 
 macro_rules! uuid_id {
     ($name:ident) => {
@@ -29,6 +31,12 @@ macro_rules! uuid_id {
                 self.0
             }
         }
+
+        impl Display for $name {
+            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+                write!(f, "{}", self.0)
+            }
+        }
     };
 }
 
@@ -41,6 +49,7 @@ uuid_id!(GeneratedProductId);
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Model {
     pub id: ModelId,
+    pub file_name: String,
     pub name: String,
     pub category: Option<ModelCategory>,
     pub model_type: Option<ModelType>,
@@ -51,6 +60,7 @@ pub struct Model {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct GeneratedProduct {
     pub id: GeneratedProductId,
+    pub name: String,
     pub models: Vec<Model>,
     pub mime_type: String,
     pub positive_prompt: Option<String>,
@@ -69,6 +79,7 @@ impl From<Model> for ai_model::Model {
         Self {
             id: value.id.into(),
             name: value.name,
+            file_name: value.file_name,
             category: value.category,
             model_type: value.model_type,
             created_at: value.created_at.naive_utc(),
@@ -82,6 +93,7 @@ impl From<ai_model::Model> for Model {
         Self {
             id: value.id.into(),
             name: value.name,
+            file_name: value.file_name,
             category: value.category,
             model_type: value.model_type,
             created_at: value.created_at.and_utc(),
@@ -98,6 +110,7 @@ impl From<GeneratedProduct> for Associated {
         (
             generated_product::Model {
                 id: value.id.into_inner(),
+                name: value.name,
                 mime_type: value.mime_type,
                 positive_prompt: value.positive_prompt,
                 negative_prompt: value.negative_prompt,
@@ -119,6 +132,7 @@ impl From<Associated> for GeneratedProduct {
         let (product, models) = value;
         Self {
             id: product.id.into(),
+            name: product.name,
             models: models.into_iter().map(|m| m.into()).collect(),
             mime_type: product.mime_type,
             positive_prompt: product.positive_prompt,

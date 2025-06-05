@@ -11,6 +11,7 @@ pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
     pub id: Uuid,
     pub name: String,
+    pub file_name: String,
     pub category: Option<ModelCategoryEnum>,
     pub model_type: Option<ModelTypeEnum>,
     pub created_at: DateTime,

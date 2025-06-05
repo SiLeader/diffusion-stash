@@ -1,3 +1,4 @@
+use crate::endpoints::Size;
 use crate::endpoints::error_response::ErrorResponse;
 use actix_web::web::{Data, Query};
 use actix_web::{HttpResponse, get};
@@ -6,12 +7,10 @@ use metadata_database::MetadataDatabase;
 use metadata_database::data::{Model, ModelCategory, ModelType};
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Default)]
 pub(super) struct QueryParams {
-    #[serde(default)]
-    offset: usize,
-    #[serde(default)]
-    limit: usize,
+    #[serde(default, flatten)]
+    size: Size,
     #[serde(default)]
     query: Option<String>,
     #[serde(default)]
@@ -38,8 +37,8 @@ pub(super) async fn handle_list_models(
             query.query,
             query.category,
             query.model_type,
-            query.offset,
-            query.limit,
+            query.size.offset,
+            query.size.limit,
         )
         .await;
     match res {
@@ -47,18 +46,6 @@ pub(super) async fn handle_list_models(
         Err(e) => {
             error!("Error while listing models: {:?}", e);
             ErrorResponse::Unknown.into()
-        }
-    }
-}
-
-impl Default for QueryParams {
-    fn default() -> Self {
-        Self {
-            offset: 0,
-            limit: 100,
-            query: None,
-            category: None,
-            model_type: None,
         }
     }
 }
