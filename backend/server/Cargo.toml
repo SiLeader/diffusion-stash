@@ -1,0 +1,15 @@
+[package]
+name = "server"
+version = "0.1.0"
+edition.workspace = true
+
+[dependencies]
+metadata-database.workspace = true
+storage.workspace = true
+
+actix-web.workspace = true
+actix-multipart.workspace = true
+
+serde = { workspace = true, features = ["derive"] }
+
+log.workspace = true

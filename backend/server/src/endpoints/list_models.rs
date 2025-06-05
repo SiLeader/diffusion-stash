@@ -1,0 +1,64 @@
+use crate::endpoints::error_response::ErrorResponse;
+use actix_web::web::{Data, Query};
+use actix_web::{HttpResponse, get};
+use log::error;
+use metadata_database::MetadataDatabase;
+use metadata_database::data::{Model, ModelCategory, ModelType};
+use serde::{Deserialize, Serialize};
+
+#[derive(Deserialize)]
+pub(super) struct QueryParams {
+    #[serde(default)]
+    offset: usize,
+    #[serde(default)]
+    limit: usize,
+    #[serde(default)]
+    query: Option<String>,
+    #[serde(default)]
+    category: Option<ModelCategory>,
+    #[serde(default, rename = "type")]
+    model_type: Option<ModelType>,
+}
+
+#[derive(Serialize)]
+struct ModelListResponse {
+    models: Vec<Model>,
+    total: usize,
+}
+
+#[get("/v1/models")]
+pub(super) async fn handle_list_models(
+    query: Query<QueryParams>,
+    metadata: Data<MetadataDatabase>,
+) -> HttpResponse {
+    let query = query.into_inner();
+
+    let res = metadata
+        .find_ai_model_with_filter(
+            query.query,
+            query.category,
+            query.model_type,
+            query.offset,
+            query.limit,
+        )
+        .await;
+    match res {
+        Ok((total, models)) => HttpResponse::Ok().json(ModelListResponse { models, total }),
+        Err(e) => {
+            error!("Error while listing models: {:?}", e);
+            ErrorResponse::Unknown.into()
+        }
+    }
+}
+
+impl Default for QueryParams {
+    fn default() -> Self {
+        Self {
+            offset: 0,
+            limit: 100,
+            query: None,
+            category: None,
+            model_type: None,
+        }
+    }
+}
