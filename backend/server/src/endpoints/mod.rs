@@ -38,18 +38,26 @@ pub(crate) fn register_endpoints(config: &mut ServiceConfig) {
         .service(handle_list_model_products);
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, Default)]
 struct Size {
-    offset: usize,
-    limit: usize,
+    #[serde(default)]
+    offset: Option<String>,
+    #[serde(default)]
+    limit: Option<String>,
 }
 
-impl Default for Size {
-    fn default() -> Self {
-        Self {
-            offset: 0,
-            limit: 100,
-        }
+impl Size {
+    fn to_limit(&self) -> usize {
+        self.limit
+            .as_deref()
+            .and_then(|s| s.parse::<usize>().ok())
+            .unwrap_or(100)
+    }
+    fn to_offset(&self) -> usize {
+        self.offset
+            .as_deref()
+            .and_then(|s| s.parse::<usize>().ok())
+            .unwrap_or(0)
     }
 }
 

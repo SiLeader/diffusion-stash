@@ -33,7 +33,11 @@ pub(super) async fn handle_list_model_products(
     let model_id = ModelId::from(model_id);
     let (total, products) = try_db!(
         metadata
-            .find_generated_product_by_model(model_id, query.size.offset, query.size.limit)
+            .find_generated_product_by_model(
+                model_id,
+                query.size.to_offset(),
+                query.size.to_limit()
+            )
             .await
     );
     HttpResponse::Ok().json(ProductsResponse { total, products })

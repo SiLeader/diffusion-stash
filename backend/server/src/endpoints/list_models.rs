@@ -37,8 +37,8 @@ pub(super) async fn handle_list_models(
             query.query,
             query.category,
             query.model_type,
-            query.size.offset,
-            query.size.limit,
+            query.size.to_offset(),
+            query.size.to_limit(),
         )
         .await;
     match res {
