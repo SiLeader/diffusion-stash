@@ -1,5 +1,5 @@
 use crate::endpoints::error_response::ErrorResponse;
-use crate::{DataStorage, try_db};
+use crate::try_db;
 use actix_web::web::{Data, Path};
 use actix_web::{HttpResponse, get};
 use metadata_database::MetadataDatabase;

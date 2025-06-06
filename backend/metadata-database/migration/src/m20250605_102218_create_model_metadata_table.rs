@@ -1,3 +1,4 @@
+use crate::sea_orm::DatabaseBackend;
 use sea_orm_migration::prelude::extension::postgres::Type;
 use sea_orm_migration::sea_orm::{EnumIter, Iterable};
 use sea_orm_migration::{prelude::*, schema::*};
@@ -8,22 +9,24 @@ pub struct Migration;
 #[async_trait::async_trait]
 impl MigrationTrait for Migration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
-        manager
-            .create_type(
-                Type::create()
-                    .as_enum(ModelCategoryEnum)
-                    .values(ModelCategory::iter())
-                    .to_owned(),
-            )
-            .await?;
-        manager
-            .create_type(
-                Type::create()
-                    .as_enum(ModelTypeEnum)
-                    .values(ModelType::iter())
-                    .to_owned(),
-            )
-            .await?;
+        if manager.get_database_backend() == DatabaseBackend::Postgres {
+            manager
+                .create_type(
+                    Type::create()
+                        .as_enum(ModelCategoryEnum)
+                        .values(ModelCategory::iter())
+                        .to_owned(),
+                )
+                .await?;
+            manager
+                .create_type(
+                    Type::create()
+                        .as_enum(ModelTypeEnum)
+                        .values(ModelType::iter())
+                        .to_owned(),
+                )
+                .await?;
+        }
         manager
             .create_table(
                 Table::create()

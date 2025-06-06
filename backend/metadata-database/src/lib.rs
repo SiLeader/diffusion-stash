@@ -6,6 +6,7 @@ mod entity;
 mod generated_products;
 mod models;
 
+use migration::{Migrator, MigratorTrait};
 pub use sea_orm::DbErr;
 
 #[derive(Clone)]
@@ -15,8 +16,9 @@ pub struct MetadataDatabase {
 
 impl MetadataDatabase {
     pub async fn new(url: &str) -> Self {
-        Self {
-            conn: Database::connect(url).await.unwrap(),
-        }
+        let conn = Database::connect(url).await.unwrap();
+        Migrator::up(&conn, None).await.unwrap();
+
+        Self { conn }
     }
 }

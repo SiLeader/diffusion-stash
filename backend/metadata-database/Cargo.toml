@@ -4,6 +4,8 @@ version = "0.1.0"
 edition.workspace = true
 
 [dependencies]
+migration.workspace = true
+
 sea-orm = { workspace = true, features = ["runtime-tokio-rustls", "sqlx-all"] }
 uuid = { version = "*", features = ["v4"] }
 

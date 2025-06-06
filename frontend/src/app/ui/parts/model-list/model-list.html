@@ -1,0 +1,15 @@
+<div>
+  <p>
+    {{ total() }} models
+  </p>
+  <mat-grid-list [cols]="columns" rowHeight="1:1" (window:resize)="onResize($event)">
+    @for (model of models(); track model.id) {
+      <mat-grid-tile>
+        <app-model-card [model]="model" (click)="onClick(model)"></app-model-card>
+      </mat-grid-tile>
+    } @empty {
+      <p>No models found.</p>
+    }
+  </mat-grid-list>
+
+</div>

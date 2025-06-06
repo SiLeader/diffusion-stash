@@ -54,18 +54,21 @@ uuid_id!(ModelId);
 uuid_id!(GeneratedProductId);
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Model {
     pub id: ModelId,
     pub file_name: String,
     pub name: String,
     pub description: String,
     pub category: Option<ModelCategory>,
+    #[serde(rename = "type")]
     pub model_type: Option<ModelType>,
     pub created_at: DateTimeUtc,
     pub updated_at: DateTimeUtc,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct GeneratedProduct {
     pub id: GeneratedProductId,
     pub name: String,

@@ -6,7 +6,6 @@ use actix_web::web::{Data, Path};
 use actix_web::{HttpResponse, get};
 use metadata_database::MetadataDatabase;
 use metadata_database::data::ModelId;
-use uuid::Uuid;
 
 #[get("/v1/models/{id}/content")]
 pub(super) async fn handle_get_model_content(

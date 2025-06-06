@@ -1,0 +1,40 @@
+<form #modelForm="ngForm" (ngSubmit)="onSubmit(modelForm)" class="container">
+  <app-pick-file
+    name="file"
+    [(ngModel)]="selectedFile"
+    required>
+  </app-pick-file>
+
+  <mat-form-field class="form-parts">
+    <mat-label>Name</mat-label>
+    <input ngModel matInput required type="text" name="name">
+  </mat-form-field>
+
+  <mat-form-field class="form-parts">
+    <mat-label>Description</mat-label>
+    <textarea ngModel matInput name="description"></textarea>
+  </mat-form-field>
+
+  <mat-form-field class="form-parts">
+    <mat-label>Category</mat-label>
+    <mat-select name="category" ngModel>
+      @for (category of selectableCategories; track category.value) {
+        <mat-option [value]="category.value">{{ category.label }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="form-parts">
+    <mat-label>Type</mat-label>
+    <mat-select name="type" ngModel>
+      @for (type of selectableTypes; track type.value) {
+        <mat-option [value]="type.value">{{ type.label }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  @if (progress) {
+    <mat-progress-bar mode="determinate" [value]="progress"></mat-progress-bar>
+  }
+  <button matButton="elevated" type="submit" [disabled]="progress">Upload</button>
+</form>

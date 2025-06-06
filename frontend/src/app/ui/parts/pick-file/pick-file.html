@@ -1,0 +1,30 @@
+<div
+  class="file-upload-container"
+  (click)="onContainerClick()"
+  (dragover)="onDragOver($event)"
+  (dragleave)="onDragLeave($event)"
+  (drop)="onDrop($event)"
+  [class.is-dragging]="isDragging">
+
+  <input
+    type="file"
+    #fileInput
+    (change)="onFileSelected($event)"
+    hidden>
+
+  <div class="upload-content">
+    <mat-icon class="upload-icon">cloud_upload</mat-icon>
+    @if (fileName) {
+      <div class="file-info">
+        <mat-icon class="file-icon">insert_drive_file</mat-icon>
+        <span class="file-name">{{ fileName }}</span>
+        <button matIconButton (click)="clearFile($event)" type="button" aria-label="Clear file">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    } @else {
+      <p>Drop file here or click to select a file.</p>
+    }
+  </div>
+
+</div>

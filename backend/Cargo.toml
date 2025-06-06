@@ -9,6 +9,8 @@ storage = { path = "storage" }
 metadata-database = { path = "metadata-database" }
 server = { path = "server" }
 
+migration = { path = "metadata-database/migration" }
+
 async-trait = "0.1.88"
 tokio = "1.45.1"
 
