@@ -23,7 +23,7 @@ pub(super) async fn handle_get_model_content(
     let Some(metadata) = try_db!(metadata.find_ai_model_by_id(model_id.clone()).await) else {
         return ErrorResponse::ModelNotFound.into();
     };
-    let data = try_storage!(storage.load_model(&model_id).await);
+    let data = try_storage!(storage.load_model(&metadata).await);
 
     HttpResponse::Ok()
         .insert_header((CONTENT_TYPE, "application/octet-stream"))

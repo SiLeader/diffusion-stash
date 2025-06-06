@@ -7,6 +7,7 @@ edition = "2024"
 [workspace.dependencies]
 storage = { path = "storage" }
 metadata-database = { path = "metadata-database" }
+server = { path = "server" }
 
 async-trait = "0.1.88"
 tokio = "1.45.1"
@@ -19,6 +20,7 @@ sea-orm = "1.1.12"
 thiserror = "2.0.12"
 
 serde = "1.0.219"
+serde_yml = "0.0.12"
 
 chrono = "0.4.41"
 uuid = "1.17.0"
@@ -34,8 +36,12 @@ edition.workspace = true
 [dependencies]
 storage.workspace = true
 metadata-database.workspace = true
+server.workspace = true
 
 tokio = { workspace = true, features = ["full"] }
+
+serde = { workspace = true, features = ["derive"] }
+serde_yml.workspace = true
 
 log.workspace = true
 env_logger.workspace = true

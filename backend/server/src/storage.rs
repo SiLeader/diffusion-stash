@@ -1,53 +1,52 @@
-use metadata_database::data::{GeneratedProductId, ModelId};
+use crate::path::PathProvider;
+use metadata_database::data::{GeneratedProduct, Model};
 use std::sync::Arc;
 use storage::{Error, Storage};
 
 #[derive(Clone)]
-pub(crate) struct DataStorage {
+pub struct DataStorage {
     storage: Arc<dyn Storage + Send + Sync>,
+    model_path_provider: Arc<dyn PathProvider<Model>>,
+    product_path_provider: Arc<dyn PathProvider<GeneratedProduct>>,
 }
 
 impl DataStorage {
-    pub(crate) fn new<S>(s: S) -> Self
+    pub fn new<S, MP, PP>(s: S, model_path_provider: MP, product_path_provider: PP) -> Self
     where
         S: 'static + Storage + Send + Sync,
+        MP: 'static + PathProvider<Model>,
+        PP: 'static + PathProvider<GeneratedProduct>,
     {
         Self {
             storage: Arc::new(s),
+            model_path_provider: Arc::new(model_path_provider),
+            product_path_provider: Arc::new(product_path_provider),
         }
     }
 }
 
-fn model_path(id: &ModelId) -> String {
-    format!("/models/{}", id)
-}
-
-fn product_path(id: &GeneratedProductId) -> String {
-    format!("/products/{}", id)
-}
-
 impl DataStorage {
-    pub(crate) async fn save_model(&self, id: &ModelId, data: &[u8]) -> Result<(), Error> {
-        let path = model_path(id);
+    pub(crate) async fn save_model(&self, model: &Model, data: &[u8]) -> Result<(), Error> {
+        let path = self.model_path_provider.get_path(model);
         self.storage.save(&path, data).await
     }
 
-    pub(crate) async fn load_model(&self, id: &ModelId) -> Result<Vec<u8>, Error> {
-        let path = model_path(id);
+    pub(crate) async fn load_model(&self, model: &Model) -> Result<Vec<u8>, Error> {
+        let path = self.model_path_provider.get_path(model);
         self.storage.load(&path).await
     }
 
     pub(crate) async fn save_product(
         &self,
-        id: &GeneratedProductId,
+        product: &GeneratedProduct,
         data: &[u8],
     ) -> Result<(), Error> {
-        let path = product_path(id);
+        let path = self.product_path_provider.get_path(product);
         self.storage.save(&path, data).await
     }
 
-    pub(crate) async fn load_product(&self, id: &GeneratedProductId) -> Result<Vec<u8>, Error> {
-        let path = product_path(id);
+    pub(crate) async fn load_product(&self, product: &GeneratedProduct) -> Result<Vec<u8>, Error> {
+        let path = self.product_path_provider.get_path(product);
         self.storage.load(&path).await
     }
 }

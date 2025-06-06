@@ -11,6 +11,6 @@ sleep 5
 url="postgres://postgres:$password@localhost:5432/database"
 
 sea-orm-cli migrate up -d metadata-database/migration -u $url
-sea-orm-cli generate entity -u $url -o metadata-database/src/entity --with-serde both
+sea-orm-cli generate entity -u $url -o metadata-database/src/entity --with-serde both --with-copy-enums --enum-extra-derives 'Hash'
 
 docker stop $migration_postgres

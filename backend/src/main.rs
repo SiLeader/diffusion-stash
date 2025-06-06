@@ -1,3 +1,5 @@
+mod config;
+
 use log::info;
 
 #[tokio::main]

@@ -27,7 +27,7 @@ pub(super) async fn handle_get_product_content(
     ) else {
         return ErrorResponse::ProductNotFound.into();
     };
-    let data = try_storage!(storage.load_product(&product_id).await);
+    let data = try_storage!(storage.load_product(&metadata).await);
 
     HttpResponse::Ok()
         .insert_header((CONTENT_TYPE, metadata.mime_type))

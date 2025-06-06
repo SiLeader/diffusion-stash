@@ -56,7 +56,7 @@ pub(super) async fn handle_add_model(
         }
         bytes
     };
-    try_storage!(storage.save_model(&metadata.id, bytes.as_slice()).await);
+    try_storage!(storage.save_model(&metadata, bytes.as_slice()).await);
 
     HttpResponse::Created().json(AddModelResponse { model: metadata })
 }
