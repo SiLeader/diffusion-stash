@@ -4,9 +4,8 @@ use crate::try_db;
 use actix_web::web::{Data, Path, Query};
 use actix_web::{HttpResponse, get};
 use metadata_database::MetadataDatabase;
-use metadata_database::data::{GeneratedProduct, ModelCategory, ModelId, ModelType};
+use metadata_database::data::{GeneratedProduct, ModelId};
 use serde::{Deserialize, Serialize};
-use std::iter::Product;
 use uuid::Uuid;
 
 #[derive(Deserialize, Default)]

@@ -12,6 +12,7 @@ pub struct Model {
     pub id: Uuid,
     pub name: String,
     pub file_name: String,
+    pub description: String,
     pub category: Option<ModelCategoryEnum>,
     pub model_type: Option<ModelTypeEnum>,
     pub created_at: DateTime,

@@ -11,16 +11,15 @@ pub struct DataStorage {
 }
 
 impl DataStorage {
-    pub fn new<S, MP, PP>(s: S, model_path_provider: MP, product_path_provider: PP) -> Self
-    where
-        S: 'static + Storage + Send + Sync,
-        MP: 'static + PathProvider<Model>,
-        PP: 'static + PathProvider<GeneratedProduct>,
-    {
+    pub fn new(
+        storage: Arc<dyn Storage + Send + Sync>,
+        model_path_provider: Arc<dyn PathProvider<Model>>,
+        product_path_provider: Arc<dyn PathProvider<GeneratedProduct>>,
+    ) -> Self {
         Self {
-            storage: Arc::new(s),
-            model_path_provider: Arc::new(model_path_provider),
-            product_path_provider: Arc::new(product_path_provider),
+            storage,
+            model_path_provider,
+            product_path_provider,
         }
     }
 }

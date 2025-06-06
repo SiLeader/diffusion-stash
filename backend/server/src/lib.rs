@@ -15,7 +15,7 @@ pub struct DiffusionStashServer {
 }
 
 impl DiffusionStashServer {
-    pub fn new<S>(database: MetadataDatabase, storage: DataStorage) -> Self {
+    pub fn new(database: MetadataDatabase, storage: DataStorage) -> Self {
         Self { database, storage }
     }
 }

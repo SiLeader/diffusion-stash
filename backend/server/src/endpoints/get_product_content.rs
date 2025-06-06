@@ -15,10 +15,9 @@ pub(super) async fn handle_get_product_content(
     metadata: Data<MetadataDatabase>,
 ) -> HttpResponse {
     let product_id = path.into_inner();
-    let Ok(product_id) = Uuid::parse_str(&product_id) else {
+    let Ok(product_id) = GeneratedProductId::try_from(product_id) else {
         return ErrorResponse::InvalidProductIdFormat.into();
     };
-    let product_id = GeneratedProductId::from(product_id);
 
     let Some(metadata) = try_db!(
         metadata

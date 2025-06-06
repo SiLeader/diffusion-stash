@@ -6,6 +6,12 @@ pub struct FlatFileNamePathProvider {
     base_directory: PathBuf,
 }
 
+impl FlatFileNamePathProvider {
+    pub fn new(base_directory: PathBuf) -> Self {
+        Self { base_directory }
+    }
+}
+
 impl PathProvider<Model> for FlatFileNamePathProvider {
     fn get_path(&self, data: &Model) -> PathBuf {
         self.base_directory.join(data.file_name.as_str())

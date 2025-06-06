@@ -3,7 +3,6 @@ use crate::entity::{ai_model, generated_product};
 use sea_orm::prelude::{DateTimeUtc, Uuid};
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
-use std::mem::Discriminant;
 
 macro_rules! uuid_id {
     ($name:ident) => {
@@ -37,6 +36,14 @@ macro_rules! uuid_id {
                 write!(f, "{}", self.0)
             }
         }
+
+        impl TryFrom<String> for $name {
+            type Error = uuid::Error;
+
+            fn try_from(value: String) -> Result<Self, Self::Error> {
+                Uuid::parse_str(&value).map(Self)
+            }
+        }
     };
 }
 
@@ -51,6 +58,7 @@ pub struct Model {
     pub id: ModelId,
     pub file_name: String,
     pub name: String,
+    pub description: String,
     pub category: Option<ModelCategory>,
     pub model_type: Option<ModelType>,
     pub created_at: DateTimeUtc,
@@ -79,6 +87,7 @@ impl From<Model> for ai_model::Model {
         Self {
             id: value.id.into(),
             name: value.name,
+            description: value.description,
             file_name: value.file_name,
             category: value.category,
             model_type: value.model_type,
@@ -93,6 +102,7 @@ impl From<ai_model::Model> for Model {
         Self {
             id: value.id.into(),
             name: value.name,
+            description: value.description,
             file_name: value.file_name,
             category: value.category,
             model_type: value.model_type,

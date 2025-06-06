@@ -32,6 +32,7 @@ impl MigrationTrait for Migration {
                     .col(pk_uuid(AiModel::Id))
                     .col(string(AiModel::Name))
                     .col(string(AiModel::FileName))
+                    .col(string(AiModel::Description))
                     .col(enumeration_null(
                         AiModel::Category,
                         ModelCategoryEnum,
@@ -130,6 +131,7 @@ pub enum AiModel {
     Table,
     Id,
     Name,
+    Description,
     FileName,
     Category,
     ModelType,

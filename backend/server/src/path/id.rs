@@ -6,6 +6,12 @@ pub struct FlatIdPathProvider {
     base_directory: PathBuf,
 }
 
+impl FlatIdPathProvider {
+    pub fn new(base_directory: PathBuf) -> Self {
+        Self { base_directory }
+    }
+}
+
 impl PathProvider<Model> for FlatIdPathProvider {
     fn get_path(&self, data: &Model) -> PathBuf {
         self.base_directory.join(data.id.to_string())

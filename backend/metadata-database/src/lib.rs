@@ -1,3 +1,4 @@
+use sea_orm::Database;
 use sea_orm::DatabaseConnection;
 
 pub mod data;
@@ -13,7 +14,9 @@ pub struct MetadataDatabase {
 }
 
 impl MetadataDatabase {
-    pub fn new(conn: DatabaseConnection) -> Self {
-        Self { conn }
+    pub async fn new(url: &str) -> Self {
+        Self {
+            conn: Database::connect(url).await.unwrap(),
+        }
     }
 }

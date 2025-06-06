@@ -28,6 +28,8 @@ uuid = "1.17.0"
 log = "0.4.27"
 env_logger = "0.11.8"
 
+clap = "4.5.39"
+
 [package]
 name = "diffusionstash-backend"
 version = "0.1.0"
@@ -38,6 +40,8 @@ storage.workspace = true
 metadata-database.workspace = true
 server.workspace = true
 
+actix-web.workspace = true
+
 tokio = { workspace = true, features = ["full"] }
 
 serde = { workspace = true, features = ["derive"] }
@@ -45,3 +49,5 @@ serde_yml.workspace = true
 
 log.workspace = true
 env_logger.workspace = true
+
+clap = { workspace = true, features = ["derive"] }
