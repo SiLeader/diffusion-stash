@@ -62,4 +62,12 @@ impl MetadataDatabase {
         let value = AiModel::find_by_id(id.into_inner()).one(&self.conn).await?;
         Ok(value.map(ModelData::from))
     }
+
+    pub async fn find_ai_model_by_name(&self, name: &str) -> Result<Option<ModelData>, DbErr> {
+        let value = AiModel::find()
+            .filter(ai_model::Column::FileName.eq(name))
+            .one(&self.conn)
+            .await?;
+        Ok(value.map(ModelData::from))
+    }
 }

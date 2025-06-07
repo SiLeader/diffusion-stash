@@ -5,6 +5,7 @@ use metadata_database::MetadataDatabase;
 mod endpoints;
 pub mod path;
 mod storage;
+mod utils;
 
 pub use storage::*;
 

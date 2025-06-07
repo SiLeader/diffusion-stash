@@ -16,7 +16,6 @@ use std::io::Read;
 #[derive(MultipartForm)]
 pub(super) struct AddProductRequest {
     file: TempFile,
-    name: Text<String>,
     models: Vec<Text<String>>,
     positive_prompt: Option<Text<String>>,
     negative_prompt: Option<Text<String>>,
@@ -58,7 +57,7 @@ pub(super) async fn handle_add_product(
     };
     let product = GeneratedProduct {
         id: GeneratedProductId::new(),
-        name: request.name.into_inner(),
+        name: request.file.file_name.unwrap_or_default(),
         models,
         mime_type: request
             .file

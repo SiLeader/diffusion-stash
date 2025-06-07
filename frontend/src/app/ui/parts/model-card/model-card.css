@@ -1,0 +1,9 @@
+.thumbnail {
+  width: 100%;
+}
+
+.model-name ::ng-deep * {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}

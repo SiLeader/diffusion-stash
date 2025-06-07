@@ -1,0 +1,11 @@
+.form-parts {
+  width: 100%;
+}
+
+.container {
+  padding: 0 20%;
+}
+
+mat-divider {
+  margin: 20px 0;
+}

@@ -6,6 +6,7 @@ edition.workspace = true
 [dependencies]
 metadata-database.workspace = true
 storage.workspace = true
+png-workflow.workspace = true
 
 actix-web.workspace = true
 actix-multipart.workspace = true

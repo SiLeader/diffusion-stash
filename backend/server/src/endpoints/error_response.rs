@@ -3,13 +3,16 @@ use serde::Serialize;
 
 #[derive(Serialize)]
 #[serde(tag = "code")]
-pub(super) enum ErrorResponse {
+pub(crate) enum ErrorResponse {
     Unknown,
     CannotReadUploadedFile,
     InvalidModelIdFormat,
     InvalidProductIdFormat,
     ProductNotFound,
     ModelNotFound,
+    ThumbnailNotFound,
+    InvalidPngFile,
+    Io,
 }
 
 impl From<ErrorResponse> for HttpResponse {
@@ -23,6 +26,9 @@ impl From<ErrorResponse> for HttpResponse {
             ErrorResponse::InvalidProductIdFormat => HttpResponse::BadRequest().json(value),
             ErrorResponse::ProductNotFound => HttpResponse::NotFound().json(value),
             ErrorResponse::ModelNotFound => HttpResponse::NotFound().json(value),
+            ErrorResponse::ThumbnailNotFound => HttpResponse::NotFound().json(value),
+            ErrorResponse::InvalidPngFile => HttpResponse::BadRequest().json(value),
+            ErrorResponse::Io => HttpResponse::InternalServerError().json(value),
         }
     }
 }
@@ -34,7 +40,7 @@ macro_rules! try_db {
             Ok(value) => value,
             Err(e) => {
                 log::error!("Database error: {e:?}");
-                return $crate::endpoints::error_response::ErrorResponse::Unknown.into();
+                return $crate::endpoints::ErrorResponse::Unknown.into();
             }
         }
     };
@@ -47,7 +53,7 @@ macro_rules! try_storage {
             Ok(value) => value,
             Err(e) => {
                 log::error!("Storage error: {e:?}");
-                return $crate::endpoints::error_response::ErrorResponse::Unknown.into();
+                return $crate::endpoints::ErrorResponse::Unknown.into();
             }
         }
     };

@@ -2,10 +2,10 @@ use crate::MetadataDatabase;
 use crate::data::ModelId;
 use crate::data::{GeneratedProduct as GeneratedProductData, GeneratedProductId};
 use crate::entity::prelude::{AiModel, GeneratedProduct, GeneratedProductModelAssociation};
-use crate::entity::{ai_model, generated_product_model_association};
+use crate::entity::{ai_model, generated_product, generated_product_model_association};
 use sea_orm::{
     ActiveModelTrait, ColumnTrait, DbErr, EntityTrait, IntoActiveModel, ModelTrait, PaginatorTrait,
-    QueryFilter, QuerySelect,
+    QueryFilter, QuerySelect, TransactionError, TransactionTrait,
 };
 
 impl MetadataDatabase {
@@ -14,20 +14,36 @@ impl MetadataDatabase {
         model: GeneratedProductData,
     ) -> Result<GeneratedProductData, DbErr> {
         let (product, models) = model.into();
-        let product = product.into_active_model().insert(&self.conn).await?;
-        GeneratedProductModelAssociation::insert_many(
-            models
-                .iter()
-                .map(|m| generated_product_model_association::Model {
-                    generated_product_id: product.id.clone(),
-                    model_id: m.id,
+        let res = self
+            .conn
+            .transaction::<_, (generated_product::Model, Vec<ai_model::Model>), DbErr>(|tx| {
+                Box::pin(async move {
+                    let product = product.into_active_model().insert(tx).await?;
+                    if !models.is_empty() {
+                        GeneratedProductModelAssociation::insert_many(
+                            models
+                                .iter()
+                                .map(|m| generated_product_model_association::Model {
+                                    generated_product_id: product.id.clone(),
+                                    model_id: m.id,
+                                })
+                                .map(IntoActiveModel::into_active_model),
+                        )
+                        .exec(tx)
+                        .await?;
+                    }
+                    Ok((product, models))
                 })
-                .map(IntoActiveModel::into_active_model),
-        )
-        .exec_with_returning_many(&self.conn)
-        .await?;
+            })
+            .await;
 
-        Ok((product, models).into())
+        match res {
+            Ok(value) => Ok(value.into()),
+            Err(e) => match e {
+                TransactionError::Connection(e) => Err(e),
+                TransactionError::Transaction(e) => Err(e),
+            },
+        }
     }
 
     pub async fn remove_generated_product(&self, id: GeneratedProductId) -> Result<(), DbErr> {

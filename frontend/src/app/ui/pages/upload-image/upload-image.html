@@ -1,0 +1,82 @@
+<form #modelForm="ngForm" (ngSubmit)="onSubmit(modelForm)" class="container">
+  <app-pick-file
+    name="file"
+    [(ngModel)]="selectedFile"
+    required>
+  </app-pick-file>
+
+  <button matButton="elevated" type="button" (click)="onDecode(modelForm)" [disabled]="isProcessing">
+    <mat-icon>checklist</mat-icon>
+    Fill from file
+  </button>
+
+  <mat-divider></mat-divider>
+
+  <h3>Models</h3>
+  <h4>Found in Diffusion Stash</h4>
+  <mat-list>
+    @for (model of models; track model.id) {
+      <mat-list-item>{{ model.name }} ({{ model.fileName }})</mat-list-item>
+    } @empty {
+      <mat-list-item>No models found.</mat-list-item>
+    }
+  </mat-list>
+
+  @if (unresolvedModels.length > 0) {
+    <h4>Not found in Diffusion Stash</h4>
+    <mat-list>
+      @for (model of unresolvedModels; track model) {
+        <mat-list-item>{{ model }}</mat-list-item>
+      }
+    </mat-list>
+  }
+
+  <mat-divider></mat-divider>
+  <h3>Prompts</h3>
+
+  <mat-form-field class="form-parts">
+    <mat-label>Positive Prompt</mat-label>
+    <textarea ngModel matInput name="positive_prompt"></textarea>
+  </mat-form-field>
+
+  <mat-form-field class="form-parts">
+    <mat-label>Negative Prompt</mat-label>
+    <textarea ngModel matInput name="negative_prompt"></textarea>
+  </mat-form-field>
+
+  <mat-divider></mat-divider>
+  <h3>Sampler / Scheduler</h3>
+
+  <mat-form-field class="form-parts">
+    <mat-label>Sampler Name</mat-label>
+    <input ngModel matInput type="text" name="sampler_name">
+  </mat-form-field>
+
+  <mat-form-field class="form-parts">
+    <mat-label>Scheduler Name</mat-label>
+    <input ngModel matInput type="text" name="scheduler_name">
+  </mat-form-field>
+
+  <mat-divider></mat-divider>
+  <h3>Parameters</h3>
+
+  <mat-form-field class="form-parts">
+    <mat-label>Steps</mat-label>
+    <input ngModel matInput type="number" name="step_count">
+  </mat-form-field>
+
+  <mat-form-field class="form-parts">
+    <mat-label>CFG</mat-label>
+    <input ngModel matInput type="number" name="cfg_scale">
+  </mat-form-field>
+
+  <mat-form-field class="form-parts">
+    <mat-label>Seed</mat-label>
+    <input ngModel matInput type="number" name="seed">
+  </mat-form-field>
+
+  <button matButton="elevated" type="submit" [disabled]="isProcessing">
+    <mat-icon>upload_2</mat-icon>
+    Upload
+  </button>
+</form>

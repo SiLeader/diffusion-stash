@@ -1,0 +1,18 @@
+[package]
+name = "png-workflow"
+version = "0.1.0"
+edition.workspace = true
+
+[dependencies]
+serde_json.workspace = true
+serde = { workspace = true, features = ["derive"] }
+png.workspace = true
+
+clap = { workspace = true, optional = true, features = ["derive"] }
+
+[features]
+command-line = ["dep:clap"]
+
+[[bin]]
+name = "png-workflow"
+required-features = ["command-line"]

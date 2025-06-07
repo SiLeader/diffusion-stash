@@ -34,7 +34,7 @@ impl MigrationTrait for Migration {
                     .if_not_exists()
                     .col(pk_uuid(AiModel::Id))
                     .col(string(AiModel::Name))
-                    .col(string(AiModel::FileName))
+                    .col(string_uniq(AiModel::FileName))
                     .col(string(AiModel::Description))
                     .col(enumeration_null(
                         AiModel::Category,
@@ -48,6 +48,17 @@ impl MigrationTrait for Migration {
                     ))
                     .col(timestamp(AiModel::CreatedAt))
                     .col(timestamp(AiModel::UpdatedAt))
+                    .to_owned(),
+            )
+            .await?;
+
+        manager
+            .create_index(
+                Index::create()
+                    .table(AiModel::Table)
+                    .if_not_exists()
+                    .name("idx_model_metadata_name")
+                    .col(AiModel::Name)
                     .to_owned(),
             )
             .await?;
@@ -90,6 +101,14 @@ impl MigrationTrait for Migration {
                 Index::drop()
                     .table(AiModel::Table)
                     .name("idx_model_metadata_category")
+                    .to_owned(),
+            )
+            .await?;
+        manager
+            .drop_index(
+                Index::drop()
+                    .table(AiModel::Table)
+                    .name("idx_model_metadata_name")
                     .to_owned(),
             )
             .await?;

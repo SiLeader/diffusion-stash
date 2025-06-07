@@ -1,8 +1,6 @@
-<a matButton="outlined" href="/upload/model">Upload Model</a>
-
 @let loadedModels = models | async;
 @if (loadedModels) {
-  <app-model-list [models]="loadedModels.models" [total]="loadedModels.total"></app-model-list>
+  <app-model-list class="model-list" [models]="loadedModels.models" [total]="loadedModels.total"></app-model-list>
 } @else {
   <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 }
