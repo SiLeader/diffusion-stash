@@ -4,7 +4,7 @@ use actix_web::web::{Data, Query};
 use actix_web::{HttpResponse, get};
 use log::error;
 use metadata_database::MetadataDatabase;
-use metadata_database::data::{Model, ModelCategory, ModelType};
+use metadata_database::data::{Model, ModelBase, ModelType};
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Default)]
@@ -14,7 +14,7 @@ pub(super) struct QueryParams {
     #[serde(default)]
     query: Option<String>,
     #[serde(default)]
-    category: Option<ModelCategory>,
+    category: Option<ModelBase>,
     #[serde(default, rename = "type")]
     model_type: Option<ModelType>,
 }

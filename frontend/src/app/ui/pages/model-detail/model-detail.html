@@ -1,6 +1,26 @@
 @let loadedModel = model | async;
 @if (loadedModel) {
-  <p>{{ loadedModel.name }}</p>
+  <div [class]="containerClass" (window:resize)="onResize($event)">
+    <h2>{{ loadedModel.name }}</h2>
+    <div class="img-container">
+      <img mat-card-image
+           class="thumbnail header-item"
+           [src]="loadedModel | thumbnail"
+           defaultSrc="/diffusion-stash-logo.png"
+           alt="Model thumbnail for {{ loadedModel.name }}">
+    </div>
+    <div>
+      <a class="header-button" matButton="outlined" [href]="loadedModel | modelContent">
+        <mat-icon>download</mat-icon>
+        Download model
+      </a>
+      <a class="header-button" matButton="outlined" href="/models/{{ loadedModel.id }}/gallery">
+        <mat-icon>photo_library</mat-icon>
+        View gallery
+      </a>
+    </div>
+    <app-model-info-table [model]="loadedModel"></app-model-info-table>
+  </div>
 } @else {
   <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 }

@@ -6,46 +6,42 @@ use serde::{Deserialize, Serialize};
 #[derive(
     Debug, Clone, PartialEq, Eq, EnumIter, DeriveActiveEnum, Copy, Serialize, Deserialize, Hash,
 )]
-#[sea_orm(
-    rs_type = "String",
-    db_type = "Enum",
-    enum_name = "model_category_enum"
-)]
-pub enum ModelCategoryEnum {
-    #[sea_orm(string_value = "checkpoint")]
-    Checkpoint,
-    #[sea_orm(string_value = "control_net")]
-    ControlNet,
-    #[sea_orm(string_value = "embedding")]
-    Embedding,
-    #[sea_orm(string_value = "lora")]
-    Lora,
-    #[sea_orm(string_value = "lycoris")]
-    Lycoris,
-    #[sea_orm(string_value = "upscaler")]
-    Upscaler,
-    #[sea_orm(string_value = "vae")]
-    Vae,
+#[sea_orm(rs_type = "String", db_type = "Enum", enum_name = "model_base_enum")]
+pub enum ModelBaseEnum {
+    #[sea_orm(string_value = "stable_diffusion15")]
+    StableDiffusion15,
+    #[sea_orm(string_value = "stable_diffusion_xl")]
+    StableDiffusionXl,
+    #[sea_orm(string_value = "pony_diffusion")]
+    PonyDiffusion,
+    #[sea_orm(string_value = "illustrious")]
+    Illustrious,
+    #[sea_orm(string_value = "stable_diffusion30")]
+    StableDiffusion30,
+    #[sea_orm(string_value = "stable_diffusion35")]
+    StableDiffusion35,
+    #[sea_orm(string_value = "flux1_s")]
+    Flux1S,
+    #[sea_orm(string_value = "flux1_d")]
+    Flux1D,
 }
 #[derive(
     Debug, Clone, PartialEq, Eq, EnumIter, DeriveActiveEnum, Copy, Serialize, Deserialize, Hash,
 )]
 #[sea_orm(rs_type = "String", db_type = "Enum", enum_name = "model_type_enum")]
 pub enum ModelTypeEnum {
-    #[sea_orm(string_value = "flux1_d")]
-    Flux1D,
-    #[sea_orm(string_value = "flux1_s")]
-    Flux1S,
-    #[sea_orm(string_value = "illustrious")]
-    Illustrious,
-    #[sea_orm(string_value = "pony_diffusion")]
-    PonyDiffusion,
-    #[sea_orm(string_value = "stable_diffusion15")]
-    StableDiffusion15,
-    #[sea_orm(string_value = "stable_diffusion30")]
-    StableDiffusion30,
-    #[sea_orm(string_value = "stable_diffusion35")]
-    StableDiffusion35,
-    #[sea_orm(string_value = "stable_diffusion_xl")]
-    StableDiffusionXl,
+    #[sea_orm(string_value = "checkpoint")]
+    Checkpoint,
+    #[sea_orm(string_value = "embedding")]
+    Embedding,
+    #[sea_orm(string_value = "lora")]
+    Lora,
+    #[sea_orm(string_value = "lycoris")]
+    Lycoris,
+    #[sea_orm(string_value = "control_net")]
+    ControlNet,
+    #[sea_orm(string_value = "upscaler")]
+    Upscaler,
+    #[sea_orm(string_value = "vae")]
+    Vae,
 }

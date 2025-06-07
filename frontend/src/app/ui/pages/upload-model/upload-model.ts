@@ -14,6 +14,8 @@ interface SelectOption {
   label: string;
 }
 
+type ProcessingState = 'uploading' | 'processing';
+
 @Component({
   selector: 'app-upload-model',
   imports: [
@@ -35,7 +37,7 @@ export class UploadModel {
   constructor(private modelRepository: ModelRepository, private snackBar: MatSnackBar) {
   }
 
-  readonly selectableCategories: SelectOption[] = [
+  readonly selectableTypes: SelectOption[] = [
     {value: 'Checkpoint', label: 'Checkpoint'},
     {value: 'Lora', label: 'LoRA'},
     {value: 'Lycoris', label: 'LyCORIS'},
@@ -46,7 +48,7 @@ export class UploadModel {
     {value: null, label: 'Other'},
   ];
 
-  readonly selectableTypes: SelectOption[] = [
+  readonly selectableCategories: SelectOption[] = [
     {value: 'StableDiffusion15', label: 'Stable Diffusion 1.5'},
     {value: 'StableDiffusionXl', label: 'Stable Diffusion XL'},
     {value: 'PonyDiffusion', label: 'Pony Diffusion'},
@@ -75,7 +77,7 @@ export class UploadModel {
       formData.append('category', form.value.category);
     }
     if (form.value.type) {
-      formData.append('type', form.value.type);
+      formData.append('model_type', form.value.type);
     }
 
     this.modelRepository.upload(formData).subscribe(event => {

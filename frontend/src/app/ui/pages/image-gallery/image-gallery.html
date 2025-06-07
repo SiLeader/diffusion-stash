@@ -1,0 +1,7 @@
+@let loadedProducts = products | async;
+@if (loadedProducts) {
+  <app-image-list class="model-list" [products]="loadedProducts.products"
+                  [total]="loadedProducts.total"></app-image-list>
+} @else {
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+}

@@ -1,5 +1,5 @@
 use crate::MetadataDatabase;
-use crate::data::{Model as ModelData, ModelCategory, ModelId, ModelType};
+use crate::data::{Model as ModelData, ModelBase, ModelId, ModelType};
 use crate::entity::ai_model;
 use crate::entity::ai_model::Model;
 use crate::entity::prelude::AiModel;
@@ -11,6 +11,7 @@ use sea_orm::{
 impl MetadataDatabase {
     pub async fn add_ai_model(&self, model: ModelData) -> Result<ModelData, DbErr> {
         let model: Model = model.into();
+        println!("{:?}", model);
         model
             .into_active_model()
             .insert(&self.conn)
@@ -28,7 +29,7 @@ impl MetadataDatabase {
     pub async fn find_ai_model_with_filter(
         &self,
         name_query: Option<String>,
-        category: Option<ModelCategory>,
+        category: Option<ModelBase>,
         model_type: Option<ModelType>,
         offset: usize,
         limit: usize,
@@ -38,7 +39,7 @@ impl MetadataDatabase {
             query = query.filter(ai_model::Column::Name.contains(name_query));
         }
         if let Some(category) = category {
-            query = query.filter(ai_model::Column::Category.eq(category));
+            query = query.filter(ai_model::Column::BaseModel.eq(category));
         }
         if let Some(model_type) = model_type {
             query = query.filter(ai_model::Column::ModelType.eq(model_type));

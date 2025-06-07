@@ -3,8 +3,8 @@ export interface Model {
   fileName: string;
   name: string;
   description: string;
-  category?: string;
-  modelType?: string;
+  baseModel?: string;
+  type?: string;
   createdAt: Date;
   updatedAt: Date;
 }

@@ -87,7 +87,7 @@ export class UploadImage {
     try {
       const decoded = await this.productRepository.decode(this.selectedFile);
       this.models = decoded.resolvedModels;
-      this.unresolvedModels = decoded.decoded.modelNames.filter(name => !decoded.resolvedModels.find(model => model.name === name));
+      this.unresolvedModels = decoded.decoded.modelNames.filter(name => !decoded.resolvedModels.find(model => model.fileName === name));
       if (decoded.decoded.positivePrompt) {
         form.controls['positive_prompt'].setValue(decoded.decoded.positivePrompt);
       }

@@ -1,0 +1,20 @@
+<table>
+  <tbody>
+  <tr>
+    <td class="header-column">Name</td>
+    <td>{{ model().name }}</td>
+  </tr>
+  <tr>
+    <td class="header-column">File name</td>
+    <td>{{ model().fileName }}</td>
+  </tr>
+  <tr>
+    <td class="header-column">Base model</td>
+    <td>{{ model().baseModel ?? 'N/A' }}</td>
+  </tr>
+  <tr>
+    <td class="header-column">Type</td>
+    <td>{{ model().type ?? "N/A" }}</td>
+  </tr>
+  </tbody>
+</table>

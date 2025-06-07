@@ -1,7 +1,7 @@
 <mat-card (click)="click.emit(model())" appearance="outlined">
   <img mat-card-image
        class="thumbnail"
-       [src]="thumbnailUrl()"
+       [src]="model() | thumbnail"
        defaultSrc="/diffusion-stash-logo.png"
        alt="Model thumbnail for {{ model().name }}">
   <mat-card-content>

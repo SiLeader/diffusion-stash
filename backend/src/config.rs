@@ -1,4 +1,4 @@
-use metadata_database::data::{GeneratedProduct, Model, ModelType};
+use metadata_database::data::{GeneratedProduct, Model, ModelBase};
 use serde::{Deserialize, Serialize};
 use server::path::{
     ComfyUiPathProvider, FlatFileNamePathProvider, FlatIdPathProvider, PathProvider,
@@ -51,7 +51,7 @@ pub(crate) enum PathProviderConfig {
     ComfyUI {
         root: String,
         #[serde(default, rename = "modelTypeDirectory")]
-        model_type_directory: Option<HashMap<ModelType, String>>,
+        model_type_directory: Option<HashMap<ModelBase, String>>,
     },
     FileName {
         base: String,

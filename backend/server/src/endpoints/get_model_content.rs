@@ -25,6 +25,9 @@ pub(super) async fn handle_get_model_content(
 
     HttpResponse::Ok()
         .insert_header((CONTENT_TYPE, "application/octet-stream"))
-        .insert_header((CONTENT_DISPOSITION, metadata.file_name))
+        .insert_header((
+            CONTENT_DISPOSITION,
+            format!("attachment; filename={}", metadata.file_name),
+        ))
         .body(data)
 }

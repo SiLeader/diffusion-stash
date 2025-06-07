@@ -10,16 +10,17 @@ use actix_web::{HttpResponse, post};
 use chrono::Utc;
 use log::error;
 use metadata_database::MetadataDatabase;
-use metadata_database::data::{Model, ModelCategory, ModelId, ModelType};
+use metadata_database::data::{Model, ModelBase, ModelId, ModelType};
 use serde::Serialize;
 use std::io::Read;
 
 #[derive(MultipartForm)]
 pub(super) struct AddModelRequest {
+    #[multipart(limit = "20GB")]
     file: TempFile,
     name: Text<String>,
     description: Option<Text<String>>,
-    category: Option<Text<ModelCategory>>,
+    base_model: Option<Text<ModelBase>>,
     model_type: Option<Text<ModelType>>,
 }
 
@@ -35,6 +36,9 @@ pub(super) async fn handle_add_model(
     storage: Data<DataStorage>,
 ) -> HttpResponse {
     let request = request.into_inner();
+    if request.model_type.is_none() {
+        return HttpResponse::NotImplemented().finish();
+    }
     let metadata = try_db!(
         metadata
             .add_ai_model(Model {
@@ -42,7 +46,7 @@ pub(super) async fn handle_add_model(
                 description: request.description.into_null_if_empty().unwrap_or_default(),
                 file_name: request.file.file_name.unwrap_or(request.name.clone()),
                 name: request.name.into_inner(),
-                category: request.category.map(|c| c.into_inner()),
+                base_model: request.base_model.map(|c| c.into_inner()),
                 model_type: request.model_type.map(|t| t.into_inner()),
                 created_at: Utc::now(),
                 updated_at: Utc::now(),

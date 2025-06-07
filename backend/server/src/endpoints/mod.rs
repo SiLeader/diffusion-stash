@@ -8,6 +8,7 @@ use crate::endpoints::get_product_content::handle_get_product_content;
 use crate::endpoints::get_product_metadata::{handle_get_product, handle_get_product_metadata};
 use crate::endpoints::list_model_products::handle_list_model_products;
 use crate::endpoints::list_models::handle_list_models;
+use actix_multipart::form::MultipartFormConfig;
 use actix_multipart::form::text::Text;
 use actix_web::web::ServiceConfig;
 pub(crate) use error_response::ErrorResponse;
@@ -27,6 +28,8 @@ mod list_models;
 
 pub(crate) fn register_endpoints(config: &mut ServiceConfig) {
     config
+        // upload limitation 20 GiB
+        .app_data(MultipartFormConfig::default().total_limit(20 * 1024 * 1024 * 1024))
         // add
         .service(handle_add_model)
         .service(handle_add_product)

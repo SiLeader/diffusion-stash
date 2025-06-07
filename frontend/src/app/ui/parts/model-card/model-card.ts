@@ -2,31 +2,25 @@ import {Component, computed, EventEmitter, input, Output} from '@angular/core';
 import {Model} from '../../../apis/data/model';
 import {
   MatCard, MatCardActions,
-  MatCardContent,
-  MatCardFooter,
-  MatCardHeader, MatCardImage,
-  MatCardSubtitle,
+  MatCardContent, MatCardImage,
   MatCardTitle
 } from '@angular/material/card';
 import {environment} from '../../../../environments/environment';
-import {NgOptimizedImage} from '@angular/common';
 import {DefaultImage} from '../../directive/default-image';
 import {MatButton} from '@angular/material/button';
+import {ThumbnailPipe} from '../../pipe/thumbnail-pipe';
 
 @Component({
   selector: 'app-model-card',
   imports: [
     MatCard,
     MatCardTitle,
-    MatCardHeader,
-    MatCardSubtitle,
-    MatCardFooter,
     MatCardContent,
-    NgOptimizedImage,
     MatCardImage,
     DefaultImage,
     MatCardActions,
-    MatButton
+    MatButton,
+    ThumbnailPipe
   ],
   templateUrl: './model-card.html',
   styleUrl: './model-card.css'

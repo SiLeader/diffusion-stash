@@ -17,6 +17,9 @@ pub(crate) async fn create_product_response(
 
     HttpResponse::Ok()
         .insert_header((CONTENT_TYPE, metadata.mime_type))
-        .insert_header((CONTENT_DISPOSITION, metadata.name))
+        .insert_header((
+            CONTENT_DISPOSITION,
+            format!("attachment; filename={}", metadata.name),
+        ))
         .body(data)
 }

@@ -2,13 +2,14 @@ import {Component} from '@angular/core';
 import {MatToolbar} from '@angular/material/toolbar';
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
+import {NgOptimizedImage} from '@angular/common';
 
 @Component({
   selector: 'app-app-bar',
   imports: [
     MatToolbar,
     MatButton,
-    MatIcon
+    MatIcon,
   ],
   templateUrl: './app-bar.html',
   styleUrl: './app-bar.css'

@@ -1,4 +1,4 @@
-use crate::entity::sea_orm_active_enums::{ModelCategoryEnum, ModelTypeEnum};
+use crate::entity::sea_orm_active_enums::{ModelBaseEnum, ModelTypeEnum};
 use crate::entity::{ai_model, generated_product};
 use sea_orm::prelude::{DateTimeUtc, Uuid};
 use serde::{Deserialize, Serialize};
@@ -47,7 +47,7 @@ macro_rules! uuid_id {
     };
 }
 
-pub type ModelCategory = ModelCategoryEnum;
+pub type ModelBase = ModelBaseEnum;
 pub type ModelType = ModelTypeEnum;
 
 uuid_id!(ModelId);
@@ -60,7 +60,7 @@ pub struct Model {
     pub file_name: String,
     pub name: String,
     pub description: String,
-    pub category: Option<ModelCategory>,
+    pub base_model: Option<ModelBase>,
     #[serde(rename = "type")]
     pub model_type: Option<ModelType>,
     pub created_at: DateTimeUtc,
@@ -92,7 +92,7 @@ impl From<Model> for ai_model::Model {
             name: value.name,
             description: value.description,
             file_name: value.file_name,
-            category: value.category,
+            base_model: value.base_model,
             model_type: value.model_type,
             created_at: value.created_at.naive_utc(),
             updated_at: value.updated_at.naive_utc(),
@@ -107,7 +107,7 @@ impl From<ai_model::Model> for Model {
             name: value.name,
             description: value.description,
             file_name: value.file_name,
-            category: value.category,
+            base_model: value.base_model,
             model_type: value.model_type,
             created_at: value.created_at.and_utc(),
             updated_at: value.updated_at.and_utc(),

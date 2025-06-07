@@ -13,8 +13,8 @@ impl MigrationTrait for Migration {
             manager
                 .create_type(
                     Type::create()
-                        .as_enum(ModelCategoryEnum)
-                        .values(ModelCategory::iter())
+                        .as_enum(ModelBaseEnum)
+                        .values(ModelBase::iter())
                         .to_owned(),
                 )
                 .await?;
@@ -37,9 +37,9 @@ impl MigrationTrait for Migration {
                     .col(string_uniq(AiModel::FileName))
                     .col(string(AiModel::Description))
                     .col(enumeration_null(
-                        AiModel::Category,
-                        ModelCategoryEnum,
-                        ModelCategory::iter(),
+                        AiModel::BaseModel,
+                        ModelBaseEnum,
+                        ModelBase::iter(),
                     ))
                     .col(enumeration_null(
                         AiModel::ModelType,
@@ -78,8 +78,8 @@ impl MigrationTrait for Migration {
                 Index::create()
                     .table(AiModel::Table)
                     .if_not_exists()
-                    .name("idx_model_metadata_category")
-                    .col(AiModel::Category)
+                    .name("idx_model_metadata_base_model")
+                    .col(AiModel::BaseModel)
                     .to_owned(),
             )
             .await?;
@@ -120,24 +120,13 @@ impl MigrationTrait for Migration {
 }
 
 #[derive(DeriveIden)]
-struct ModelCategoryEnum;
+struct ModelBaseEnum;
 
 #[derive(DeriveIden)]
 struct ModelTypeEnum;
 
 #[derive(Iden, EnumIter)]
-enum ModelCategory {
-    Checkpoint,
-    Embedding,
-    Lora,
-    Lycoris,
-    ControlNet,
-    Upscaler,
-    Vae,
-}
-
-#[derive(Iden, EnumIter)]
-enum ModelType {
+enum ModelBase {
     StableDiffusion15,
     StableDiffusionXL,
     PonyDiffusion,
@@ -148,6 +137,17 @@ enum ModelType {
     Flux1D,
 }
 
+#[derive(Iden, EnumIter)]
+enum ModelType {
+    Checkpoint,
+    Embedding,
+    Lora,
+    Lycoris,
+    ControlNet,
+    Upscaler,
+    Vae,
+}
+
 #[derive(DeriveIden)]
 pub enum AiModel {
     Table,
@@ -155,7 +155,7 @@ pub enum AiModel {
     Name,
     Description,
     FileName,
-    Category,
+    BaseModel,
     ModelType,
     CreatedAt,
     UpdatedAt,

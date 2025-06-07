@@ -1,0 +1,14 @@
+<div>
+  <p>
+    {{ total() }} products
+  </p>
+  <mat-grid-list [cols]="columns" rowHeight="6:10" (window:resize)="onResize($event)">
+    @for (product of products(); track product.id) {
+      <mat-grid-tile>
+        <img class="image" [src]="product | productContent" alt="{{ product.name }}">
+      </mat-grid-tile>
+    } @empty {
+      <p>No products found.</p>
+    }
+  </mat-grid-list>
+</div>
