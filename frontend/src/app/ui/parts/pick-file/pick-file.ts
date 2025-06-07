@@ -1,15 +1,17 @@
-import {Component, ElementRef, forwardRef, HostListener, input, ViewChild} from '@angular/core';
-import {MatButton, MatIconButton} from '@angular/material/button';
+import {Component, ElementRef, forwardRef, ViewChild} from '@angular/core';
+import {MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {MatFormField} from '@angular/material/input';
+import {MatCard, MatCardContent} from '@angular/material/card';
 
 @Component({
   selector: 'app-pick-file',
   imports: [
     MatIcon,
     MatIconButton,
-    MatFormField,
+    MatCard,
+    MatCardContent,
   ],
   providers: [
     {
@@ -25,6 +27,7 @@ export class PickFile implements ControlValueAccessor {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   fileName: string | null = null;
+  imagePreviewUrl: string | ArrayBuffer | null = null; // 画像プレビュー用のURLを保持するプロパティを追加
   isDragging = false;
 
   onChange: (file: File | null) => void = () => {
@@ -33,6 +36,7 @@ export class PickFile implements ControlValueAccessor {
   };
 
   writeValue(value: any): void {
+    // Note: This is intentionally left blank.
   }
 
   registerOnChange(fn: any): void {
@@ -43,21 +47,18 @@ export class PickFile implements ControlValueAccessor {
     this.onTouched = fn;
   }
 
-  @HostListener('dragover', ['$event'])
   onDragOver(event: DragEvent): void {
     event.preventDefault();
     event.stopPropagation();
     this.isDragging = true;
   }
 
-  @HostListener('dragleave', ['$event'])
   onDragLeave(event: DragEvent): void {
     event.preventDefault();
     event.stopPropagation();
     this.isDragging = false;
   }
 
-  @HostListener('drop', ['$event'])
   onDrop(event: DragEvent): void {
     event.preventDefault();
     event.stopPropagation();
@@ -70,6 +71,14 @@ export class PickFile implements ControlValueAccessor {
   }
 
   onContainerClick(): void {
+    // プレビュー画像やファイル情報がクリックされてもダイアログを開く
+    if (!this.fileName) {
+      this.fileInput.nativeElement.click();
+    }
+  }
+
+  // ファイル選択ボタンを明示的にクリックするためのメソッド
+  openFilePicker(): void {
     this.fileInput.nativeElement.click();
   }
 
@@ -82,6 +91,18 @@ export class PickFile implements ControlValueAccessor {
 
   private handleFile(file: File): void {
     this.fileName = file.name;
+
+    // ファイルが画像かどうかをMIMEタイプで判定
+    if (file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreviewUrl = reader.result; // 読み込み結果をプレビューURLに設定
+      };
+      reader.readAsDataURL(file); // ファイルをData URLとして読み込む
+    } else {
+      this.imagePreviewUrl = null; // 画像でなければプレビューはnull
+    }
+
     this.onChange(file);
     this.onTouched();
   }
@@ -89,6 +110,7 @@ export class PickFile implements ControlValueAccessor {
   clearFile(event: MouseEvent): void {
     event.stopPropagation();
     this.fileName = null;
+    this.imagePreviewUrl = null; // プレビューURLもクリア
     this.fileInput.nativeElement.value = '';
     this.onChange(null);
     this.onTouched();

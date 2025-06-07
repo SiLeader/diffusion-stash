@@ -15,3 +15,24 @@ export interface Product {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface MultipleProducts {
+  products: Product[];
+  total: number;
+}
+
+export interface GenerationInfo {
+  modelNames: string[];
+  positivePrompt?: string;
+  negativePrompt?: string;
+  stepCount?: number;
+  cfgScale?: number;
+  seed?: number;
+  samplerName?: string;
+  schedulerName?: string;
+}
+
+export interface DecodedPng {
+  resolvedModels: Model[];
+  decoded: GenerationInfo,
+}

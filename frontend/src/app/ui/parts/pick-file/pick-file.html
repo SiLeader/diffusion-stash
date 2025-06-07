@@ -1,6 +1,6 @@
 <div
   class="file-upload-container"
-  (click)="onContainerClick()"
+  (click)="openFilePicker()"
   (dragover)="onDragOver($event)"
   (dragleave)="onDragLeave($event)"
   (drop)="onDrop($event)"
@@ -10,21 +10,31 @@
     type="file"
     #fileInput
     (change)="onFileSelected($event)"
-    hidden>
+    accept="image/*, .pdf, .doc, .docx" hidden>
 
   <div class="upload-content">
-    <mat-icon class="upload-icon">cloud_upload</mat-icon>
     @if (fileName) {
-      <div class="file-info">
-        <mat-icon class="file-icon">insert_drive_file</mat-icon>
-        <span class="file-name">{{ fileName }}</span>
-        <button matIconButton (click)="clearFile($event)" type="button" aria-label="Clear file">
-          <mat-icon>close</mat-icon>
-        </button>
+      <div class="file-display-container">
+        @if (imagePreviewUrl) {
+          <img [src]="imagePreviewUrl" class="image-preview" alt="Image Preview">
+        } @else {
+          <mat-icon class="file-icon-large">insert_drive_file</mat-icon>
+        }
+
+        <mat-card>
+          <mat-card-content>
+            <span class="file-name">{{ fileName }}</span>
+            <button mat-icon-button (click)="clearFile($event)" type="button" aria-label="Clear file">
+              <mat-icon>close</mat-icon>
+            </button>
+          </mat-card-content>
+        </mat-card>
       </div>
     } @else {
-      <p>Drop file here or click to select a file.</p>
+      <div class="prompt-container">
+        <mat-icon class="upload-icon">cloud_upload</mat-icon>
+        <p>Drop file here or click to select a file.</p>
+      </div>
     }
   </div>
-
 </div>
