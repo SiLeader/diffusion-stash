@@ -7,9 +7,8 @@ import {ProductRepository} from '../../../apis/repositories/product-repository';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatIcon} from '@angular/material/icon';
 import {MatDivider} from '@angular/material/divider';
-import {firstValueFrom, Observable} from 'rxjs';
+import {firstValueFrom} from 'rxjs';
 import {Model} from '../../../apis/data/model';
-import {ModelRepository} from '../../../apis/repositories/model-repository';
 import {MatList, MatListItem} from '@angular/material/list';
 
 @Component({

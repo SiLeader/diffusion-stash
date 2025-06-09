@@ -1,15 +1,28 @@
 <mat-toolbar>
+  <mat-toolbar-row>
   <span>
-    <a matButton href="/">Diffusion Stash</a></span>
-  <span class="flex-spacer"></span>
+    <a matButton routerLink="">Diffusion Stash</a></span>
+    <span class="flex-spacer"></span>
 
-  <a matButton="outlined" href="/upload/model">
-    <mat-icon>upload_2</mat-icon>
-    Upload Model
-  </a>
-  <span class="spacer"></span>
-  <a matButton="outlined" href="/upload/image">
-    <mat-icon>upload_2</mat-icon>
-    Upload Image
-  </a>
+    <a matButton="outlined" routerLink="upload/model">
+      <mat-icon>upload_2</mat-icon>
+      Upload Model
+    </a>
+    <span class="spacer"></span>
+    <a matButton="outlined" routerLink="upload/image">
+      <mat-icon>upload_2</mat-icon>
+      Upload Image
+    </a>
+  </mat-toolbar-row>
+
+  <mat-toolbar-row>
+    <a matButton routerLink="models">
+      <mat-icon>folder_open</mat-icon>
+      Models
+    </a>
+    <a matButton routerLink="images">
+      <mat-icon>photo_library</mat-icon>
+      Images
+    </a>
+  </mat-toolbar-row>
 </mat-toolbar>

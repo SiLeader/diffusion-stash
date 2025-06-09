@@ -1,11 +1,10 @@
-import {Component, computed, EventEmitter, input, Output} from '@angular/core';
+import {Component, EventEmitter, input, Output} from '@angular/core';
 import {Model} from '../../../apis/data/model';
 import {
   MatCard, MatCardActions,
   MatCardContent, MatCardImage,
   MatCardTitle
 } from '@angular/material/card';
-import {environment} from '../../../../environments/environment';
 import {DefaultImage} from '../../directive/default-image';
 import {MatButton} from '@angular/material/button';
 import {ThumbnailPipe} from '../../pipe/thumbnail-pipe';
@@ -30,6 +29,4 @@ export class ModelCard {
 
   @Output()
   click: EventEmitter<Model> = new EventEmitter();
-
-  thumbnailUrl = computed(() => `${environment.apiUrl}/v1/models/${this.model().id}/thumbnail`);
 }

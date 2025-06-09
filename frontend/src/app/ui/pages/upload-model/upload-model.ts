@@ -14,8 +14,6 @@ interface SelectOption {
   label: string;
 }
 
-type ProcessingState = 'uploading' | 'processing';
-
 @Component({
   selector: 'app-upload-model',
   imports: [

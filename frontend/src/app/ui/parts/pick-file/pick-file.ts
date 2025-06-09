@@ -2,7 +2,6 @@ import {Component, ElementRef, forwardRef, ViewChild} from '@angular/core';
 import {MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {MatFormField} from '@angular/material/input';
 import {MatCard, MatCardContent} from '@angular/material/card';
 
 @Component({

@@ -1,8 +1,6 @@
 import {Component, input, OnInit} from '@angular/core';
 import {MatGridList, MatGridTile} from "@angular/material/grid-list";
-import {ModelCard} from "../model-card/model-card";
 import {Router} from '@angular/router';
-import {Model} from '../../../apis/data/model';
 import {Product} from '../../../apis/data/product';
 import {ProductContentPipe} from '../../pipe/product-content-pipe';
 
@@ -11,7 +9,6 @@ import {ProductContentPipe} from '../../pipe/product-content-pipe';
   imports: [
     MatGridList,
     MatGridTile,
-    ModelCard,
     ProductContentPipe
   ],
   templateUrl: './image-list.html',
