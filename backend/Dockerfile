@@ -7,6 +7,7 @@ COPY . .
 
 RUN --mount=type=cache,target=/work/target \
     --mount=type=cache,target=/work/.cargo \
+    apk add --no-cache musl-dev && \
     cargo build --release && \
     cp target/release/diffusionstash-backend /
 

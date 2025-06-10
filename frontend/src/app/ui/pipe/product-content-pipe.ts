@@ -1,12 +1,15 @@
 import {Pipe, PipeTransform} from '@angular/core';
-import {environment} from '../../../environments/environment';
 import {Product} from '../../apis/data/product';
+import {PathProvider} from '../../apis/repositories/path-provider';
 
 @Pipe({
   name: 'productContent'
 })
 export class ProductContentPipe implements PipeTransform {
+  constructor(private pathProvider: PathProvider) {
+  }
+
   transform(value: Product): string {
-    return `${environment.apiUrl}/v1/products/${value.id}/content`;
+    return `${this.pathProvider.getApiUrl()}/v1/products/${value.id}/content`;
   }
 }

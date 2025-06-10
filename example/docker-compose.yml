@@ -1,0 +1,24 @@
+services:
+  backend:
+    image: ghcr.io/sileader/diffusion-stash/backend
+    container_name: diffusion-stash-backend
+    command: ["/bin/diffusionstash-backend", "/etc/diffusion-stash/config.yaml"]
+    restart: unless-stopped
+    volumes:
+      - ./data:/data # Persists models and images
+      - ./config.yaml:/etc/diffusion-stash/config.yaml
+    tmpfs: /tmp # Uploaded files location
+  frontend:
+    image: ghcr.io/sileader/diffusion-stash/frontend
+    container_name: diffusion-stash-frontend
+    restart: unless-stopped
+
+  reverse-proxy:
+    image: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 8080:80
+    depends_on:
+      - backend
+      - frontend

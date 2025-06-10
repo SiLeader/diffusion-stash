@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpEvent} from '@angular/common/http';
 import {map, Observable} from 'rxjs';
 import {Model, MultipleModels} from '../data/model';
-import {environment} from '../../../environments/environment';
+import {PathProvider} from './path-provider';
 
 export interface FetchListOptions {
   offset: number;
@@ -21,11 +21,11 @@ interface ModelResponse {
 })
 export class ModelRepository {
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient, private pathProvider: PathProvider) {
   }
 
   fetchList(options?: Partial<FetchListOptions>): Observable<MultipleModels> {
-    const url = new URL(`${environment.apiUrl}/v1/models`);
+    const url = new URL(`${this.pathProvider.getApiUrl()}/v1/models`);
     if (options?.offset) {
       url.searchParams.set('offset', options.offset.toString());
     }
@@ -45,11 +45,11 @@ export class ModelRepository {
   }
 
   fetchById(id: string): Observable<Model> {
-    return this.httpClient.get<ModelResponse>(`${environment.apiUrl}/v1/models/${id}`).pipe(map(response => response.model));
+    return this.httpClient.get<ModelResponse>(`${this.pathProvider.getApiUrl()}/v1/models/${id}`).pipe(map(response => response.model));
   }
 
   upload(formData: FormData): Observable<HttpEvent<any>> {
-    return this.httpClient.post<ModelResponse>(`${environment.apiUrl}/v1/models`, formData, {
+    return this.httpClient.post<ModelResponse>(`${this.pathProvider.getApiUrl()}/v1/models`, formData, {
       reportProgress: true,
       observe: 'events'
     });

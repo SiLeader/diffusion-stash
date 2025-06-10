@@ -1,12 +1,15 @@
 import {Pipe, PipeTransform} from '@angular/core';
 import {Model} from '../../apis/data/model';
-import {environment} from '../../../environments/environment';
+import {PathProvider} from '../../apis/repositories/path-provider';
 
 @Pipe({
   name: 'modelContent'
 })
 export class ModelContentPipe implements PipeTransform {
+  constructor(private pathProvider: PathProvider) {
+  }
+
   transform(value: Model): string {
-    return `${environment.apiUrl}/v1/models/${value.id}/content`;
+    return `${this.pathProvider.getApiUrl()}/v1/models/${value.id}/content`;
   }
 }

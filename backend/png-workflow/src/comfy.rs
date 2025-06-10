@@ -2,7 +2,6 @@ use crate::{GenerationInfo, InfoExtractorError};
 use png::text_metadata::TEXtChunk;
 use serde_json::Value;
 use std::collections::HashMap;
-use std::path::PathBuf;
 
 impl GenerationInfo {
     pub(crate) fn from_text_chunks_comfy(
@@ -59,11 +58,10 @@ impl GenerationInfo {
                 .map(String::from),
             model_names: unpiped
                 .and_then(|n| Self::get_linked_text_input(&workflow, n, "model", "ckpt_name"))
-                .and_then(|name| {
-                    PathBuf::from(name)
-                        .file_name()
-                        .and_then(|n| n.to_str())
-                        .map(ToString::to_string)
+                .map(|name| {
+                    name.rsplit_once(&['/', '\\'])
+                        .map(|(_, name)| name.to_string())
+                        .unwrap_or(name)
                 })
                 .into_iter()
                 .collect(),
