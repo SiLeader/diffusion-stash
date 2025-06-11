@@ -10,6 +10,8 @@ png.workspace = true
 
 clap = { workspace = true, optional = true, features = ["derive"] }
 
+regex.workspace = true
+
 [features]
 command-line = ["dep:clap"]
 

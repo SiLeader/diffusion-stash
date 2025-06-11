@@ -23,7 +23,7 @@ fn print_info(info: &GenerationInfo) {
         opt.as_ref().map_or("N/A".to_string(), |v| v.to_string())
     }
 
-    println!("-- Model file name:\n{}", info.model_names.join("\n  "));
+    println!("-- Model file name:\n{}", info.model_names.join("\n"));
     println!(
         "-- Positive prompt:\n{}",
         format_option(&info.positive_prompt)
