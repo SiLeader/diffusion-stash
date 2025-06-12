@@ -1,0 +1,26 @@
+<mat-form-field>
+  <mat-label>Type</mat-label>
+  <mat-select [(value)]="selectedType">
+    @for (type of selectableTypes(); track type.value) {
+      <mat-option [value]="type">{{ type.label }}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>
+
+<mat-form-field>
+  <mat-label>Base Model</mat-label>
+  <mat-select [(value)]="selectedBaseModel">
+    @for (baseModel of selectableBaseModels(); track baseModel.value) {
+      <mat-option [value]="baseModel">{{ baseModel.label }}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>
+
+<mat-form-field>
+  <mat-label>Model</mat-label>
+  <mat-select [value]="selectedModel()" (valueChange)="onModelChange($event)">
+    @for (model of candidateModelsResource.value().models; track model.id) {
+      <mat-option [value]="model">{{ model.name }} ({{ model.fileName }})</mat-option>
+    }
+  </mat-select>
+</mat-form-field>

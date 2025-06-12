@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, Signal} from '@angular/core';
 import {FormsModule, NgForm} from '@angular/forms';
 import {PickFile} from '../../parts/pick-file/pick-file';
 import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
@@ -8,11 +8,8 @@ import {MatButton} from '@angular/material/button';
 import {MatProgressBar} from '@angular/material/progress-bar';
 import {HttpEventType, HttpUploadProgressEvent} from '@angular/common/http';
 import {MatSnackBar} from '@angular/material/snack-bar';
-
-interface SelectOption {
-  value: string | null;
-  label: string;
-}
+import {ModelCategoryProvider} from '../../../apis/repositories/model-category-provider';
+import {SelectOption} from '../../../apis/data/model-category';
 
 @Component({
   selector: 'app-upload-model',
@@ -32,31 +29,17 @@ interface SelectOption {
   styleUrl: './upload-model.css'
 })
 export class UploadModel {
-  constructor(private modelRepository: ModelRepository, private snackBar: MatSnackBar) {
+  constructor(
+    private modelRepository: ModelRepository,
+    private snackBar: MatSnackBar,
+    modelCategoryProvider: ModelCategoryProvider
+  ) {
+    this.selectableTypes = modelCategoryProvider.fetchSelectableModelTypes();
+    this.selectableBaseModels = modelCategoryProvider.fetchSelectableBaseModels();
   }
 
-  readonly selectableTypes: SelectOption[] = [
-    {value: 'Checkpoint', label: 'Checkpoint'},
-    {value: 'Lora', label: 'LoRA'},
-    {value: 'Lycoris', label: 'LyCORIS'},
-    {value: 'Vae', label: 'VAE'},
-    {value: 'Embedding', label: 'Embedding'},
-    {value: 'Upscaler', label: 'Upscaler Model'},
-    {value: 'ControlNet', label: 'ControlNet Model'},
-    {value: null, label: 'Other'},
-  ];
-
-  readonly selectableCategories: SelectOption[] = [
-    {value: 'StableDiffusion15', label: 'Stable Diffusion 1.5'},
-    {value: 'StableDiffusionXl', label: 'Stable Diffusion XL'},
-    {value: 'PonyDiffusion', label: 'Pony Diffusion'},
-    {value: 'Illustrious', label: 'Illustrious'},
-    {value: 'StableDiffusion30', label: 'Stable Diffusion 3'},
-    {value: 'StableDiffusion35', label: 'Stable Diffusion 3.5'},
-    {value: 'Flux1D', label: 'Flux.1 D'},
-    {value: 'Flux1S', label: 'Flux.1 S'},
-    {value: null, label: 'Other'},
-  ];
+  readonly selectableTypes: Signal<SelectOption[]>;
+  readonly selectableBaseModels: Signal<SelectOption[]>;
 
   progress: number | null = null;
   selectedFile: File | null = null;

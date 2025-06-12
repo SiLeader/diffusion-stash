@@ -18,16 +18,16 @@
   <mat-form-field class="form-parts">
     <mat-label>Type</mat-label>
     <mat-select name="type" ngModel>
-      @for (type of selectableTypes; track type.value) {
+      @for (type of selectableTypes(); track type.value) {
         <mat-option [value]="type.value">{{ type.label }}</mat-option>
       }
     </mat-select>
   </mat-form-field>
 
   <mat-form-field class="form-parts">
-    <mat-label>Category</mat-label>
+    <mat-label>Base Model</mat-label>
     <mat-select name="category" ngModel>
-      @for (category of selectableCategories; track category.value) {
+      @for (category of selectableBaseModels(); track category.value) {
         <mat-option [value]="category.value">{{ category.label }}</mat-option>
       }
     </mat-select>
