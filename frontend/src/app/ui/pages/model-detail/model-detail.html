@@ -1,4 +1,4 @@
-@let loadedModel = model | async;
+@let loadedModel = model.value();
 @if (loadedModel) {
   <div [class]="containerClass" (window:resize)="onResize($event)">
     <h2>{{ loadedModel.name }}</h2>

@@ -1,6 +1,6 @@
-import {Injectable, Resource, Signal} from '@angular/core';
+import {Injectable, resource, Resource, Signal} from '@angular/core';
 import {HttpClient, HttpEvent, httpResource} from '@angular/common/http';
-import {map, Observable} from 'rxjs';
+import {Observable} from 'rxjs';
 import {Model, MultipleModels} from '../data/model';
 import {PathProvider} from './path-provider';
 
@@ -44,12 +44,50 @@ export class ModelRepository {
     return url.toString();
   }
 
-  fetchList(options?: Partial<FetchListOptions>): Observable<MultipleModels> {
-    return this.httpClient.get<MultipleModels>(this.listUrl(options));
+  fetchList(options?: Partial<FetchListOptions>): Resource<MultipleModels | null> {
+    return httpResource<MultipleModels | null>(
+      () => ({
+        url: this.listUrl(options)
+      }),
+      {
+        defaultValue: null,
+      }
+    );
   }
 
-  fetchById(id: string): Observable<Model> {
-    return this.httpClient.get<ModelResponse>(`${this.pathProvider.getApiUrl()}/v1/models/${id}`).pipe(map(response => response.model));
+  private async fetchByIdAsync(id: string): Promise<Model | null> {
+    const res = await fetch(`${this.pathProvider.getApiUrl()}/v1/models/${id}`);
+    if (res.ok) {
+      return (await res.json()) as Model;
+    } else {
+      return null;
+    }
+  }
+
+  fetchByIdOrNull(id: Signal<string | null | undefined>): Resource<Model | null> {
+    return resource<Model | null, undefined>({
+      defaultValue: null,
+      loader: async () => {
+        const mid = id();
+        if (mid) {
+          return await this.fetchByIdAsync(mid);
+        } else {
+          return null;
+        }
+      }
+    })
+  }
+
+  fetchById(id: Signal<string>): Resource<Model | null> {
+    return httpResource<Model | null>(
+      () => ({
+        url: `${this.pathProvider.getApiUrl()}/v1/models/${id()}`
+      }),
+      {
+        defaultValue: null,
+        parse: (response: unknown) => (response as ModelResponse).model
+      }
+    );
   }
 
   upload(formData: FormData): Observable<HttpEvent<any>> {

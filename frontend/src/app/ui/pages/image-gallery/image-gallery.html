@@ -1,4 +1,10 @@
-@let loadedProducts = products | async;
+@let loadedProducts = products.value();
+@let loadedModel = model.value();
+
+@if (loadedModel) {
+  <h2>{{ loadedModel.name }}</h2>
+}
+
 @if (loadedProducts) {
   <app-image-list class="model-list" [products]="loadedProducts.products"
                   [total]="loadedProducts.total"></app-image-list>

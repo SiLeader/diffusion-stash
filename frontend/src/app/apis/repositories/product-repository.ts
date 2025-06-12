@@ -1,5 +1,5 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {Injectable, Resource, Signal} from '@angular/core';
+import {HttpClient, httpResource} from '@angular/common/http';
 import {firstValueFrom, map, Observable} from 'rxjs';
 import {DecodedPng, MultipleProducts, Product} from '../data/product';
 import {PathProvider} from './path-provider';
@@ -21,32 +21,41 @@ export class ProductRepository {
   constructor(private httpClient: HttpClient, private pathProvider: PathProvider) {
   }
 
-  fetchListByModel(modelId: string, options?: Partial<FetchListOptions>): Observable<MultipleProducts> {
-    const url = new URL(`${this.pathProvider.getApiUrl()}/v1/models/${modelId}/products`);
+  private createUrl(path: string, options?: Partial<FetchListOptions>): string {
+    const url = new URL(`${this.pathProvider.getApiUrl()}${path}`);
     if (options?.offset) {
       url.searchParams.set('offset', options.offset.toString());
     }
     if (options?.limit) {
       url.searchParams.set('limit', options.limit.toString());
     }
-
-    return this.httpClient.get<MultipleProducts>(url.toString());
+    return url.toString();
   }
 
-  fetchList(options?: Partial<FetchListOptions>): Observable<MultipleProducts> {
-    const url = new URL(`${this.pathProvider.getApiUrl()}/v1/products`);
-    if (options?.offset) {
-      url.searchParams.set('offset', options.offset.toString());
-    }
-    if (options?.limit) {
-      url.searchParams.set('limit', options.limit.toString());
-    }
-
-    return this.httpClient.get<MultipleProducts>(url.toString());
+  fetchListByModelOrWhole(modelId: Signal<string | null | undefined>, options?: Partial<FetchListOptions>): Resource<MultipleProducts | null> {
+    return httpResource<MultipleProducts | null>(
+      () => {
+        const mid = modelId();
+        return {
+          url: this.createUrl(mid ? `/v1/models/${mid}/products` : '/v1/products', options),
+        }
+      },
+      {
+        defaultValue: null,
+      }
+    );
   }
 
-  fetchById(id: string): Observable<Product> {
-    return this.httpClient.get<ProductResponse>(`${this.pathProvider.getApiUrl()}/v1/products/${id}`).pipe(map(response => response.product));
+  fetchById(id: Signal<string>): Resource<Product | null> {
+    return httpResource<Product | null>(
+      () => ({
+        url: `${this.pathProvider.getApiUrl()}/v1/products/${id()}`
+      }),
+      {
+        defaultValue: null,
+        parse: (response: unknown) => (response as ProductResponse).product
+      }
+    );
   }
 
   decode(file: File): Promise<DecodedPng> {

@@ -1,9 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, effect, OnInit, Resource} from '@angular/core';
 import {Model} from '../../../apis/data/model';
 import {ActivatedRoute} from '@angular/router';
-import {map, mergeAll, Observable} from 'rxjs';
+import {map} from 'rxjs';
 import {ModelRepository} from '../../../apis/repositories/model-repository';
-import {AsyncPipe, NgOptimizedImage} from '@angular/common';
 import {MatProgressBar} from '@angular/material/progress-bar';
 import {ModelInfoTable} from '../../parts/model-info-table/model-info-table';
 import {DefaultImage} from '../../directive/default-image';
@@ -12,11 +11,12 @@ import {ThumbnailPipe} from '../../pipe/thumbnail-pipe';
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {ModelContentPipe} from '../../pipe/model-content-pipe';
+import {Title} from '@angular/platform-browser';
+import {toSignal} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-model-detail',
   imports: [
-    AsyncPipe,
     MatProgressBar,
     ModelInfoTable,
     DefaultImage,
@@ -30,8 +30,14 @@ import {ModelContentPipe} from '../../pipe/model-content-pipe';
   styleUrl: './model-detail.css'
 })
 export class ModelDetail implements OnInit {
-  constructor(route: ActivatedRoute, modelRepository: ModelRepository) {
-    this.model = route.params.pipe(map(params => modelRepository.fetchById(params['id'])), mergeAll())
+  constructor(route: ActivatedRoute, modelRepository: ModelRepository, title: Title) {
+    const id = toSignal(route.params.pipe(map(params => params['id'])));
+    this.model = modelRepository.fetchById(id);
+    title.setTitle('Model Detail - Diffusion Stash');
+
+    effect(() => {
+      title.setTitle(`${this.model.value()?.name} - Diffusion Stash`);
+    });
   }
 
   containerClass = 'container-xs';
@@ -56,5 +62,5 @@ export class ModelDetail implements OnInit {
     }
   }
 
-  model: Observable<Model>;
+  model: Resource<Model | null>;
 }

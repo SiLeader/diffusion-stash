@@ -1,4 +1,4 @@
-@let loadedModels = models | async;
+@let loadedModels = models.value();
 @if (loadedModels) {
   <app-model-list class="model-list" [models]="loadedModels.models" [total]="loadedModels.total"></app-model-list>
 } @else {
