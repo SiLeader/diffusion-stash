@@ -40,7 +40,7 @@ png = "0.17.16"
 
 [package]
 name = "diffusionstash-backend"
-version = "0.1.2"
+version = "0.1.3"
 edition.workspace = true
 
 [dependencies]
