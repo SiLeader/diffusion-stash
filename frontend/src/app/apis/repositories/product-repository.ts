@@ -33,6 +33,18 @@ export class ProductRepository {
     return this.httpClient.get<MultipleProducts>(url.toString());
   }
 
+  fetchList(options?: Partial<FetchListOptions>): Observable<MultipleProducts> {
+    const url = new URL(`${this.pathProvider.getApiUrl()}/v1/products`);
+    if (options?.offset) {
+      url.searchParams.set('offset', options.offset.toString());
+    }
+    if (options?.limit) {
+      url.searchParams.set('limit', options.limit.toString());
+    }
+
+    return this.httpClient.get<MultipleProducts>(url.toString());
+  }
+
   fetchById(id: string): Observable<Product> {
     return this.httpClient.get<ProductResponse>(`${this.pathProvider.getApiUrl()}/v1/products/${id}`).pipe(map(response => response.product));
   }

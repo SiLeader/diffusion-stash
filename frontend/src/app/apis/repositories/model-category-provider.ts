@@ -13,14 +13,14 @@ export class ModelCategoryProvider {
     return resource({
       defaultValue: [],
       loader: async () => [
-        {key: 'StableDiffusion15', name: 'Stable Diffusion 1.5'},
-        {key: 'StableDiffusionXl', name: 'Stable Diffusion XL'},
-        {key: 'PonyDiffusion', name: 'Pony Diffusion'},
-        {key: 'Illustrious', name: 'Illustrious'},
-        {key: 'StableDiffusion30', name: 'Stable Diffusion 3'},
-        {key: 'StableDiffusion35', name: 'Stable Diffusion 3.5'},
-        {key: 'Flux1D', name: 'Flux.1 D'},
-        {key: 'Flux1S', name: 'Flux.1 S'},
+        {id: 'StableDiffusion15', name: 'Stable Diffusion 1.5'},
+        {id: 'StableDiffusionXl', name: 'Stable Diffusion XL'},
+        {id: 'PonyDiffusion', name: 'Pony Diffusion'},
+        {id: 'Illustrious', name: 'Illustrious'},
+        {id: 'StableDiffusion30', name: 'Stable Diffusion 3'},
+        {id: 'StableDiffusion35', name: 'Stable Diffusion 3.5'},
+        {id: 'Flux1D', name: 'Flux.1 D'},
+        {id: 'Flux1S', name: 'Flux.1 S'},
       ]
     });
   }
@@ -29,20 +29,20 @@ export class ModelCategoryProvider {
     return resource({
       defaultValue: [],
       loader: async () => [
-        {key: 'Checkpoint', name: 'Checkpoint'},
-        {key: 'Lora', name: 'LoRA'},
-        {key: 'Lycoris', name: 'LyCORIS'},
-        {key: 'Vae', name: 'VAE'},
-        {key: 'Embedding', name: 'Embedding'},
-        {key: 'Upscaler', name: 'Upscaler Model'},
-        {key: 'ControlNet', name: 'ControlNet Model'},
+        {id: 'Checkpoint', name: 'Checkpoint'},
+        {id: 'Lora', name: 'LoRA'},
+        {id: 'Lycoris', name: 'LyCORIS'},
+        {id: 'Vae', name: 'VAE'},
+        {id: 'Embedding', name: 'Embedding'},
+        {id: 'Upscaler', name: 'Upscaler Model'},
+        {id: 'ControlNet', name: 'ControlNet Model'},
       ]
     });
   }
 
-  fetchSelectableModelTypes(): Signal<SelectOption[]> {
+  fetchSelectableModelTypes(modelTypesResource: Resource<ModelType[]>): Signal<SelectOption[]> {
     return computed(() => {
-      const types = this.fetchModelTypes().value()?.map(type => ({
+      const types = modelTypesResource.value()?.map(type => ({
         value: type.id,
         label: type.name
       })) || [];
@@ -50,9 +50,9 @@ export class ModelCategoryProvider {
     });
   }
 
-  fetchSelectableBaseModels(): Signal<SelectOption[]> {
+  fetchSelectableBaseModels(baseModelsResource: Resource<BaseModel[]>): Signal<SelectOption[]> {
     return computed(() => {
-      const baseModels = this.fetchBaseModels().value()?.map(model => ({
+      const baseModels = baseModelsResource.value()?.map(model => ({
         value: model.id,
         label: model.name
       })) || [];

@@ -8,6 +8,7 @@ use crate::endpoints::get_product_content::handle_get_product_content;
 use crate::endpoints::get_product_metadata::{handle_get_product, handle_get_product_metadata};
 use crate::endpoints::list_model_products::handle_list_model_products;
 use crate::endpoints::list_models::handle_list_models;
+use crate::endpoints::list_products::handle_list_products;
 use actix_multipart::form::MultipartFormConfig;
 use actix_multipart::form::text::Text;
 use actix_web::web::ServiceConfig;
@@ -25,6 +26,7 @@ mod get_product_content;
 mod get_product_metadata;
 mod list_model_products;
 mod list_models;
+mod list_products;
 
 pub(crate) fn register_endpoints(config: &mut ServiceConfig) {
     config
@@ -44,6 +46,7 @@ pub(crate) fn register_endpoints(config: &mut ServiceConfig) {
         .service(handle_get_model_thumbnail_content)
         // list
         .service(handle_list_models)
+        .service(handle_list_products)
         .service(handle_list_model_products)
         // utility
         .service(handle_decode_png);

@@ -34,8 +34,8 @@ export class UploadModel {
     private snackBar: MatSnackBar,
     modelCategoryProvider: ModelCategoryProvider
   ) {
-    this.selectableTypes = modelCategoryProvider.fetchSelectableModelTypes();
-    this.selectableBaseModels = modelCategoryProvider.fetchSelectableBaseModels();
+    this.selectableTypes = modelCategoryProvider.fetchSelectableModelTypes(modelCategoryProvider.fetchModelTypes());
+    this.selectableBaseModels = modelCategoryProvider.fetchSelectableBaseModels(modelCategoryProvider.fetchBaseModels());
   }
 
   readonly selectableTypes: Signal<SelectOption[]>;
@@ -55,7 +55,7 @@ export class UploadModel {
     formData.append('name', form.value.name);
     formData.append('description', form.value.description);
     if (form.value.category) {
-      formData.append('category', form.value.category);
+      formData.append('base_model', form.value.category);
     }
     if (form.value.type) {
       formData.append('model_type', form.value.type);

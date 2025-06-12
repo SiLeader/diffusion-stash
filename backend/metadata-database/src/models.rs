@@ -4,7 +4,7 @@ use crate::entity::ai_model;
 use crate::entity::ai_model::Model;
 use crate::entity::prelude::AiModel;
 use sea_orm::{
-    ActiveModelTrait, ColumnTrait, DbErr, EntityTrait, IntoActiveModel, PaginatorTrait,
+    ActiveModelTrait, ColumnTrait, DbErr, EntityTrait, IntoActiveModel, Order, PaginatorTrait,
     QueryFilter, QueryOrder, QuerySelect,
 };
 
@@ -49,6 +49,7 @@ impl MetadataDatabase {
             .clone()
             .offset(offset as u64)
             .limit(limit as u64)
+            .order_by(ai_model::Column::CreatedAt, Order::Asc)
             .all(&self.conn)
             .await?;
         let count = query.count(&self.conn).await?;

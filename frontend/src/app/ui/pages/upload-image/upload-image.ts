@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, signal} from '@angular/core';
 import {FormsModule, NgForm} from '@angular/forms';
 import {PickFile} from '../../parts/pick-file/pick-file';
 import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
@@ -10,6 +10,7 @@ import {MatDivider} from '@angular/material/divider';
 import {firstValueFrom} from 'rxjs';
 import {Model} from '../../../apis/data/model';
 import {MatList, MatListItem} from '@angular/material/list';
+import {ModelSelector} from '../../parts/model-selector/model-selector';
 
 @Component({
   selector: 'app-upload-image',
@@ -23,7 +24,8 @@ import {MatList, MatListItem} from '@angular/material/list';
     MatButton,
     MatDivider,
     MatList,
-    MatListItem
+    MatListItem,
+    ModelSelector
   ],
   templateUrl: './upload-image.html',
   styleUrl: './upload-image.css'
@@ -37,7 +39,7 @@ export class UploadImage {
 
   selectedFile: File | null = null;
   isProcessing = false;
-  models: Model[] = [];
+  models = signal<(Model | null)[]>([]);
   unresolvedModels: string[] = [];
 
   async onSubmit(form: NgForm) {
@@ -58,8 +60,10 @@ export class UploadImage {
       formData.append("step_count", form.value.step_count);
       formData.append("cfg_scale", form.value.cfg_scale);
       formData.append("seed", form.value.seed);
-      for (const model of this.models) {
-        formData.append("models", model.id);
+      for (const model of this.models()) {
+        if (model) {
+          formData.append("models", model.id);
+        }
       }
 
       await firstValueFrom(this.productRepository.upload(formData));
@@ -85,7 +89,7 @@ export class UploadImage {
 
     try {
       const decoded = await this.productRepository.decode(this.selectedFile);
-      this.models = decoded.resolvedModels;
+      this.models.set(decoded.resolvedModels);
       this.unresolvedModels = decoded.decoded.modelNames.filter(name => !decoded.resolvedModels.find(model => model.fileName === name));
       if (decoded.decoded.positivePrompt) {
         form.controls['positive_prompt'].setValue(decoded.decoded.positivePrompt);
@@ -111,5 +115,28 @@ export class UploadImage {
     } finally {
       this.isProcessing = false;
     }
+  }
+
+  trackKey(index: number, model: Model | null) {
+    return model?.id ?? index;
+  }
+
+  onAddModel() {
+    this.models.update(models => [...models, null]);
+  }
+
+  onModelChange(model: Model | null, index: number) {
+    console.log(model, index);
+    this.models.update(models => {
+      models[index] = model;
+      return models;
+    });
+  }
+
+  onModelRemove(index: number) {
+    this.models.update(models => {
+      models.splice(index, 1);
+      return models;
+    });
   }
 }

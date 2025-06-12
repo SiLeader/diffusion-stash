@@ -19,10 +19,20 @@ import {MultipleProducts} from '../../../apis/data/product';
 })
 export class ImageGallery {
   constructor(route: ActivatedRoute, productRepository: ProductRepository) {
-    this.products = route.params.pipe(map(params => productRepository.fetchListByModel(params['id'], {
-      offset: 0,
-      limit: 100
-    })), mergeAll());
+    this.products = route.params.pipe(map(params => {
+      const id = params['id'];
+      if (id) {
+        return productRepository.fetchListByModel(id, {
+          offset: 0,
+          limit: 100
+        })
+      } else {
+        return productRepository.fetchList({
+          offset: 0,
+          limit: 100
+        })
+      }
+    }), mergeAll());
   }
 
   products: Observable<MultipleProducts>;

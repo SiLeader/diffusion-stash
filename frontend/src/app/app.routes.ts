@@ -8,6 +8,7 @@ import {ImageGallery} from './ui/pages/image-gallery/image-gallery';
 export const routes: Routes = [
   {path: '', redirectTo: 'models', pathMatch: 'full'},
   {path: 'models', component: ModelGallery},
+  {path: 'gallery', component: ImageGallery},
   {path: 'upload/model', component: UploadModel},
   {path: 'upload/image', component: UploadImage},
   {path: 'models/:id', component: ModelDetail},

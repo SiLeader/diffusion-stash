@@ -59,10 +59,10 @@ export class ModelRepository {
     });
   }
 
-  fetchListResource(options: Signal<Partial<FetchListOptions>>): Resource<MultipleModels> {
+  fetchListResource(): Resource<MultipleModels> {
     return httpResource(
       () => ({
-        url: this.listUrl(options())
+        url: this.listUrl()
       }),
       {
         defaultValue: {models: [], total: 0},

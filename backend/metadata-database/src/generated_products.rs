@@ -3,9 +3,10 @@ use crate::data::ModelId;
 use crate::data::{GeneratedProduct as GeneratedProductData, GeneratedProductId};
 use crate::entity::prelude::{AiModel, GeneratedProduct, GeneratedProductModelAssociation};
 use crate::entity::{ai_model, generated_product, generated_product_model_association};
+use migration::Order;
 use sea_orm::{
     ActiveModelTrait, ColumnTrait, DbErr, EntityTrait, IntoActiveModel, ModelTrait, PaginatorTrait,
-    QueryFilter, QuerySelect, TransactionError, TransactionTrait,
+    QueryFilter, QueryOrder, QuerySelect, TransactionError, TransactionTrait,
 };
 
 impl MetadataDatabase {
@@ -53,6 +54,26 @@ impl MetadataDatabase {
         Ok(())
     }
 
+    pub async fn find_generated_products(
+        &self,
+        offset: usize,
+        limit: usize,
+    ) -> Result<(usize, Vec<GeneratedProductData>), DbErr> {
+        let products = GeneratedProduct::find()
+            .find_with_related(AiModel)
+            .offset(offset as u64)
+            .limit(limit as u64)
+            .order_by(generated_product::Column::CreatedAt, Order::Asc)
+            .all(&self.conn)
+            .await?;
+        let count = GeneratedProduct::find().count(&self.conn).await?;
+
+        Ok((
+            count as usize,
+            products.into_iter().map(|p| p.into()).collect(),
+        ))
+    }
+
     pub async fn find_generated_product_by_model(
         &self,
         model_id: ModelId,
@@ -64,6 +85,7 @@ impl MetadataDatabase {
             .filter(ai_model::Column::Id.eq(model_id.clone().into_inner()))
             .offset(offset as u64)
             .limit(limit as u64)
+            .order_by(generated_product::Column::CreatedAt, Order::Asc)
             .all(&self.conn)
             .await?;
         let count = GeneratedProductModelAssociation::find()

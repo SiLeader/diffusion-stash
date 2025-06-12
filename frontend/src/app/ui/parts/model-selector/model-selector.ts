@@ -1,10 +1,11 @@
-import {Component, computed, input, output, Resource, signal, Signal} from '@angular/core';
+import {Component, input, output, Resource} from '@angular/core';
 import {MatFormField, MatOption, MatSelect} from '@angular/material/select';
-import {ModelCategoryProvider} from '../../../apis/repositories/model-category-provider';
-import {BaseModel, ModelType, SelectOption} from '../../../apis/data/model-category';
 import {Model, MultipleModels} from '../../../apis/data/model';
-import {FetchListOptions, ModelRepository} from '../../../apis/repositories/model-repository';
+import {ModelRepository} from '../../../apis/repositories/model-repository';
 import {FormsModule} from '@angular/forms';
+import {MatLabel} from '@angular/material/input';
+import {MatButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
 
 @Component({
   selector: 'app-model-selector',
@@ -12,40 +13,36 @@ import {FormsModule} from '@angular/forms';
     MatSelect,
     MatFormField,
     MatOption,
-    FormsModule
+    FormsModule,
+    MatLabel,
+    MatButton,
+    MatIcon
   ],
   templateUrl: './model-selector.html',
   styleUrl: './model-selector.css'
 })
 export class ModelSelector {
   constructor(
-    modelCategoryProvider: ModelCategoryProvider,
     modelRepository: ModelRepository,
   ) {
-    this.selectableTypes = modelCategoryProvider.fetchSelectableModelTypes();
-    this.selectableBaseModels = modelCategoryProvider.fetchSelectableBaseModels();
-
-    const options = computed<Partial<FetchListOptions>>(() => ({
-      offset: 0,
-      limit: 100,
-      type: this.selectedType()?.id,
-      baseModel: this.selectedBaseModel()?.id
-    }));
-    this.candidateModelsResource = modelRepository.fetchListResource(options);
+    this.candidateModelsResource = modelRepository.fetchListResource();
   }
-
-  readonly selectableTypes: Signal<SelectOption[]>;
-  readonly selectableBaseModels: Signal<SelectOption[]>;
-
-  selectedType = signal<ModelType | null>(null);
-  selectedBaseModel = signal<BaseModel | null>(null);
 
   selectedModel = input<Model | null>(null);
   selectedModelChange = output<Model | null>();
+  modelRemove = output();
 
   readonly candidateModelsResource: Resource<MultipleModels>;
 
-  onModelChange(model: Model | null) {
+  onModelChange(modelId: string | null) {
+    let model = null;
+    if (modelId) {
+      model = this.candidateModelsResource.value().models.find(m => m.id === modelId) ?? null;
+    }
     this.selectedModelChange.emit(model);
+  }
+
+  onModelRemove() {
+    this.modelRemove.emit();
   }
 }
