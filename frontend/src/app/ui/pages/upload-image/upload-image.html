@@ -13,14 +13,23 @@
   <mat-divider></mat-divider>
 
   <h3>Models</h3>
-  <h4>Found in Diffusion Stash</h4>
-  <mat-list>
-    @for (model of models; track model.id) {
-      <mat-list-item>{{ model.name }} ({{ model.fileName }})</mat-list-item>
+  <section>
+    @for (model of models(); track trackKey($index, model)) {
+      <app-model-selector
+        [selectedModel]="model"
+        (selectedModelChange)="onModelChange($event, $index)"
+        (modelRemove)="onModelRemove($index)">
+      </app-model-selector>
     } @empty {
-      <mat-list-item>No models found.</mat-list-item>
+      <p>No models found.</p>
     }
-  </mat-list>
+    <p>
+      <button matButton type="button" (click)="onAddModel()">
+        <mat-icon>add</mat-icon>
+        Add model
+      </button>
+    </p>
+  </section>
 
   @if (unresolvedModels.length > 0) {
     <h4>Not found in Diffusion Stash</h4>

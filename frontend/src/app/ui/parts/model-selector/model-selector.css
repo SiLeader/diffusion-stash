@@ -1,0 +1,11 @@
+.container {
+  display: flex;
+}
+
+.field-parts {
+  margin: 8px 4px;
+}
+
+.model-selector {
+  flex-grow: 1;
+}

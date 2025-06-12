@@ -1,0 +1,15 @@
+<div class="container">
+  <mat-form-field class="field-parts model-selector">
+    <mat-label>Model</mat-label>
+    <mat-select [value]="selectedModel()?.id" (valueChange)="onModelChange($event)">
+      @for (model of candidateModelsResource.value().models; track model.id) {
+        <mat-option [value]="model?.id">{{ model.name }} ({{ model.fileName }})</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <button matButton type="button" (click)="onModelRemove()">
+    <mat-icon>close</mat-icon>
+    Remove
+  </button>
+</div>

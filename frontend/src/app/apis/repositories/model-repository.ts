@@ -1,5 +1,5 @@
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpEvent} from '@angular/common/http';
+import {Injectable, Resource, Signal} from '@angular/core';
+import {HttpClient, HttpEvent, httpResource} from '@angular/common/http';
 import {map, Observable} from 'rxjs';
 import {Model, MultipleModels} from '../data/model';
 import {PathProvider} from './path-provider';
@@ -8,7 +8,7 @@ export interface FetchListOptions {
   offset: number;
   limit: number;
   query: string;
-  category: string;
+  baseModel: string;
   type: string;
 }
 
@@ -24,7 +24,7 @@ export class ModelRepository {
   constructor(private httpClient: HttpClient, private pathProvider: PathProvider) {
   }
 
-  fetchList(options?: Partial<FetchListOptions>): Observable<MultipleModels> {
+  private listUrl(options?: Partial<FetchListOptions>): string {
     const url = new URL(`${this.pathProvider.getApiUrl()}/v1/models`);
     if (options?.offset) {
       url.searchParams.set('offset', options.offset.toString());
@@ -35,13 +35,17 @@ export class ModelRepository {
     if (options?.query) {
       url.searchParams.set('query', options.query);
     }
-    if (options?.category) {
-      url.searchParams.set('category', options.category);
+    if (options?.baseModel) {
+      url.searchParams.set('category', options.baseModel);
     }
     if (options?.type) {
       url.searchParams.set('type', options.type);
     }
-    return this.httpClient.get<MultipleModels>(url.toString());
+    return url.toString();
+  }
+
+  fetchList(options?: Partial<FetchListOptions>): Observable<MultipleModels> {
+    return this.httpClient.get<MultipleModels>(this.listUrl(options));
   }
 
   fetchById(id: string): Observable<Model> {
@@ -53,5 +57,16 @@ export class ModelRepository {
       reportProgress: true,
       observe: 'events'
     });
+  }
+
+  fetchListResource(): Resource<MultipleModels> {
+    return httpResource(
+      () => ({
+        url: this.listUrl()
+      }),
+      {
+        defaultValue: {models: [], total: 0},
+      }
+    );
   }
 }
