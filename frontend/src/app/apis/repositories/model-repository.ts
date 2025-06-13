@@ -1,4 +1,4 @@
-import {Injectable, resource, Resource, Signal} from '@angular/core';
+import {Injectable, Resource, Signal} from '@angular/core';
 import {HttpClient, HttpEvent, httpResource} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Model, MultipleModels} from '../data/model';
@@ -44,38 +44,18 @@ export class ModelRepository {
     return url.toString();
   }
 
-  fetchList(options?: Partial<FetchListOptions>): Resource<MultipleModels | null> {
-    return httpResource<MultipleModels | null>(
-      () => ({
-        url: this.listUrl(options)
-      }),
-      {
-        defaultValue: null,
-      }
-    );
+  async fetchListAsync(options?: Partial<FetchListOptions>): Promise<MultipleModels | null> {
+    const res = await fetch(this.listUrl(options));
+    return res.ok ? res.json() : null;
   }
 
-  private async fetchByIdAsync(id: string): Promise<Model | null> {
+  async fetchByIdAsync(id: string): Promise<Model | null> {
     const res = await fetch(`${this.pathProvider.getApiUrl()}/v1/models/${id}`);
     if (res.ok) {
-      return (await res.json()) as Model;
+      return ((await res.json()) as ModelResponse).model;
     } else {
       return null;
     }
-  }
-
-  fetchByIdOrNull(id: Signal<string | null | undefined>): Resource<Model | null> {
-    return resource<Model | null, undefined>({
-      defaultValue: null,
-      loader: async () => {
-        const mid = id();
-        if (mid) {
-          return await this.fetchByIdAsync(mid);
-        } else {
-          return null;
-        }
-      }
-    })
   }
 
   fetchById(id: Signal<string>): Resource<Model | null> {

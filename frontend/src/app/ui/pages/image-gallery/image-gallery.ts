@@ -1,4 +1,4 @@
-import {Component, effect, Resource, signal} from '@angular/core';
+import {Component, effect, signal} from '@angular/core';
 import {MatProgressBar} from "@angular/material/progress-bar";
 import {ImageList} from '../../parts/image-list/image-list';
 import {map} from 'rxjs';
@@ -8,7 +8,6 @@ import {MultipleProducts, Product} from '../../../apis/data/product';
 import {Title} from '@angular/platform-browser';
 import {Model} from '../../../apis/data/model';
 import {ModelRepository} from '../../../apis/repositories/model-repository';
-import {toSignal} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-image-gallery',
@@ -24,12 +23,18 @@ export class ImageGallery {
 
   constructor(route: ActivatedRoute, productRepository: ProductRepository, modelRepository: ModelRepository, title: Title) {
     title.setTitle('Image Gallery - Diffusion Stash');
-    const id = toSignal(route.params.pipe(map(params => params['id'])));
-
-    this.model = modelRepository.fetchByIdOrNull(id);
+    route.params.pipe(map(params => params['id'])).subscribe(async id => {
+      this.model.set(await modelRepository.fetchByIdAsync(id));
+    })
 
     effect(() => {
-      if (this.totalProductCount && this.offset + ImageGallery.DEFAULT_LIMIT >= this.totalProductCount) {
+      const model = this.model();
+      const name = model?.name ?? 'Image';
+      title.setTitle(`${name} gallery - Diffusion Stash`);
+    });
+
+    effect(() => {
+      if (this.totalProductCount && this.offset >= this.totalProductCount) {
         return;
       }
 
@@ -37,7 +42,11 @@ export class ImageGallery {
         return;
       }
 
-      const model = this.model.value();
+      const model = this.model();
+      if (model === undefined) {
+        return;
+      }
+
       const options: FetchListOptions = {
         offset: this.offset,
         limit: ImageGallery.DEFAULT_LIMIT,
@@ -46,20 +55,18 @@ export class ImageGallery {
         model
           ? productRepository.fetchListByModelAsync(model.id, options)
           : productRepository.fetchListAsync(options)
-      ).then();
+      ).finally(() => this.isLoading.set(false));
     });
 
-    effect(() => {
-      const model = this.model.value();
-      const name = model?.name ?? 'Image';
-      title.setTitle(`${name} gallery - Diffusion Stash`);
-    });
   }
 
   private offset = 0;
   private totalProductCount: number | null = null;
 
+  isLoading = signal(false);
+
   private async assignMore(promise: Promise<MultipleProducts | null>) {
+    this.isLoading.set(true);
     const loaded = await promise;
     if (!loaded) {
       return;
@@ -72,12 +79,10 @@ export class ImageGallery {
     this.offset += loaded.products.length;
   }
 
-  model: Resource<Model | null>;
+  model = signal<Model | null | undefined>(undefined);
 
-  readonly isBottomReached = signal(false);
-
+  readonly isBottomReached = signal(true);
   readonly totalProducts = signal(0);
-
   readonly items = signal<Product[]>([]);
 
   onBottomReach() {

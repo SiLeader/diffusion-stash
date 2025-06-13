@@ -1,15 +1,17 @@
-import {Component, input, OnInit} from '@angular/core';
+import {Component, input, OnInit, output} from '@angular/core';
 import {Model} from '../../../apis/data/model';
 import {MatGridList, MatGridTile} from '@angular/material/grid-list';
 import {ModelCard} from '../model-card/model-card';
 import {Router} from '@angular/router';
+import {InfiniteScrollDirective} from 'ngx-infinite-scroll';
 
 @Component({
   selector: 'app-model-list',
   imports: [
     MatGridList,
     MatGridTile,
-    ModelCard
+    ModelCard,
+    InfiniteScrollDirective
   ],
   templateUrl: './model-list.html',
   styleUrl: './model-list.css'
@@ -18,9 +20,10 @@ export class ModelList implements OnInit {
   constructor(private router: Router) {
   }
 
-
   total = input.required<number>();
   models = input.required<Model[]>();
+
+  bottomReach = output();
 
   columns = 4;
 

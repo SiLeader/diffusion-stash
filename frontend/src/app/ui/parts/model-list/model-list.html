@@ -2,7 +2,15 @@
   <p>
     {{ total() }} models
   </p>
-  <mat-grid-list [cols]="columns" rowHeight="6:10" (window:resize)="onResize($event)">
+  <mat-grid-list
+    [cols]="columns"
+    rowHeight="6:10"
+    (window:resize)="onResize($event)"
+    infiniteScroll
+    [infiniteScrollDistance]="2"
+    [infiniteScrollThrottle]="50"
+    (scrollend)="bottomReach.emit()"
+    (scrolled)="bottomReach.emit()">
     @for (model of models(); track model.id) {
       <mat-grid-tile>
         <app-model-card [model]="model" (click)="onClick(model)"></app-model-card>
@@ -11,5 +19,4 @@
       <p>No models found.</p>
     }
   </mat-grid-list>
-
 </div>
