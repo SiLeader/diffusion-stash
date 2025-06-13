@@ -29,15 +29,17 @@ export class ImageGallery {
     this.model = modelRepository.fetchByIdOrNull(id);
 
     effect(() => {
-      const offset = this.items().length;
-      const total = this.totalProducts();
-      if (offset + ImageGallery.DEFAULT_LIMIT >= total) {
+      if (this.totalProductCount && this.offset + ImageGallery.DEFAULT_LIMIT >= this.totalProductCount) {
+        return;
+      }
+
+      if (!this.isBottomReached()) {
         return;
       }
 
       const model = this.model.value();
       const options: FetchListOptions = {
-        offset: offset,
+        offset: this.offset,
         limit: ImageGallery.DEFAULT_LIMIT,
       };
       this.assignMore(
@@ -54,6 +56,9 @@ export class ImageGallery {
     });
   }
 
+  private offset = 0;
+  private totalProductCount: number | null = null;
+
   private async assignMore(promise: Promise<MultipleProducts | null>) {
     const loaded = await promise;
     if (!loaded) {
@@ -61,11 +66,21 @@ export class ImageGallery {
     }
 
     this.items.update(items => [...items, ...loaded.products]);
+    this.totalProducts.set(loaded.total);
+    this.isBottomReached.set(false);
+    this.totalProductCount = loaded.total;
+    this.offset += loaded.products.length;
   }
 
   model: Resource<Model | null>;
 
+  readonly isBottomReached = signal(false);
+
   readonly totalProducts = signal(0);
 
   readonly items = signal<Product[]>([]);
+
+  onBottomReach() {
+    this.isBottomReached.set(true);
+  }
 }

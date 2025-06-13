@@ -1,4 +1,4 @@
-import {Component, input, OnInit} from '@angular/core';
+import {Component, input, OnInit, output} from '@angular/core';
 import {MatGridList, MatGridTile} from "@angular/material/grid-list";
 import {Router} from '@angular/router';
 import {Product} from '../../../apis/data/product';
@@ -20,6 +20,8 @@ export class ImageList implements OnInit {
 
   total = input.required<number>();
   products = input.required<Product[]>();
+
+  bottomReach = output();
 
   columns = 4;
 
