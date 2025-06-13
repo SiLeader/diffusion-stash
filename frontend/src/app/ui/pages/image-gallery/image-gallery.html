@@ -1,13 +1,16 @@
-@let loadedProducts = products.value();
-@let loadedModel = model.value();
+@let loadedModel = model();
 
 @if (loadedModel) {
   <h2>{{ loadedModel.name }}</h2>
 }
 
-@if (loadedProducts) {
-  <app-image-list class="model-list" [products]="loadedProducts.products"
-                  [total]="loadedProducts.total"></app-image-list>
-} @else {
+@if (items().length === 0 && isLoading()) {
   <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+} @else {
+  <app-image-list
+    class="model-list"
+    [products]="items()"
+    [total]="totalProducts()"
+    (bottomReach)="onBottomReach()">
+  </app-image-list>
 }

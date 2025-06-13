@@ -1,15 +1,20 @@
-import {Component, input, OnInit} from '@angular/core';
+import {Component, input, OnInit, output} from '@angular/core';
 import {MatGridList, MatGridTile} from "@angular/material/grid-list";
-import {Router} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {Product} from '../../../apis/data/product';
 import {ProductContentPipe} from '../../pipe/product-content-pipe';
+import {InfiniteScrollDirective} from 'ngx-infinite-scroll';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-image-list',
   imports: [
     MatGridList,
     MatGridTile,
-    ProductContentPipe
+    ProductContentPipe,
+    InfiniteScrollDirective,
+    MatProgressSpinner,
+    RouterLink,
   ],
   templateUrl: './image-list.html',
   styleUrl: './image-list.css'
@@ -20,6 +25,9 @@ export class ImageList implements OnInit {
 
   total = input.required<number>();
   products = input.required<Product[]>();
+  isLoading = input(false);
+
+  bottomReach = output();
 
   columns = 4;
 
@@ -46,5 +54,4 @@ export class ImageList implements OnInit {
       this.columns = 4;
     }
   }
-
 }
