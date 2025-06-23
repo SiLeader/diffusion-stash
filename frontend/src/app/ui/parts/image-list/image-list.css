@@ -5,3 +5,31 @@
   object-fit: contain;
   margin: 4px;
 }
+
+.masonry-container {
+  margin: 0 auto;
+  position: relative;
+}
+
+.image-item {
+  margin-bottom: 12px;
+  width: calc(25% - 9px);
+}
+
+@media (max-width: 1200px) {
+  .image-item {
+    width: calc(33.333% - 8px);
+  }
+}
+
+@media (max-width: 768px) {
+  .image-item {
+    width: calc(50% - 6px);
+  }
+}
+
+@media (max-width: 576px) {
+  .image-item {
+    width: 100%;
+  }
+}

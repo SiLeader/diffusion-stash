@@ -1,0 +1,14 @@
+@let loadedProduct = product.value();
+
+@if (loadedProduct) {
+  <div [class]="containerClass" (window:resize)="onResize($event)">
+    <h2>{{ loadedProduct.name }}</h2>
+    <div class="img-container">
+      <img mat-card-image
+           class="thumbnail header-item"
+           [src]="loadedProduct | productContent"
+           defaultSrc="/diffusion-stash-logo.png"
+           [alt]="loadedProduct.name">
+    </div>
+  </div>
+}

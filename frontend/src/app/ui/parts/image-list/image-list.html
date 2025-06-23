@@ -2,26 +2,23 @@
   <p>
     {{ total() }} products
   </p>
-  <mat-grid-list
-    [cols]="columns"
-    rowHeight="6:10"
-    (window:resize)="onResize($event)"
+  <ngx-masonry
+    [options]="masonryOptions"
+    [ordered]="true"
+    [updateLayout]="updateTrigger"
+    class="masonry-container"
     infiniteScroll
     [infiniteScrollDistance]="2"
     [infiniteScrollThrottle]="50"
-    (scrollend)="bottomReach.emit()"
     (scrolled)="bottomReach.emit()">
     @for (product of products(); track product.id) {
-      <mat-grid-tile>
+      <ngxMasonryItem class="image-item">
         <a [routerLink]="'/products/' + product.id">
           <img class="image" loading="lazy" [src]="product | productContent" alt="{{ product.name }}">
         </a>
-      </mat-grid-tile>
+      </ngxMasonryItem>
     } @empty {
       <p>No products found.</p>
     }
-  </mat-grid-list>
-  @if (isLoading()) {
-    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
-  }
+  </ngx-masonry>
 </div>
