@@ -10,6 +10,7 @@ import {DefaultImage} from '../../directive/default-image';
 import {MatCardImage} from '@angular/material/card';
 import {ThumbnailPipe} from '../../pipe/thumbnail-pipe';
 import {ProductContentPipe} from '../../pipe/product-content-pipe';
+import {ImageInfo} from '../../parts/image-info/image-info';
 
 @Component({
   selector: 'app-image-detail',
@@ -17,7 +18,8 @@ import {ProductContentPipe} from '../../pipe/product-content-pipe';
     DefaultImage,
     MatCardImage,
     ThumbnailPipe,
-    ProductContentPipe
+    ProductContentPipe,
+    ImageInfo
   ],
   templateUrl: './image-detail.html',
   styleUrl: './image-detail.css'

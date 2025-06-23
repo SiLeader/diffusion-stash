@@ -1,0 +1,41 @@
+<h3>Prompts</h3>
+<h4>Positive</h4>
+<p>{{ product().positivePrompt ?? "N/A" }}</p>
+<h4>Negative</h4>
+<p>{{ product().negativePrompt ?? "N/A" }}</p>
+
+<h3>Models</h3>
+<mat-list>
+  @for (model of product().models; track model.id) {
+    <mat-list-item>
+      <span matListItemTitle>{{ model.name }}</span>
+      <span matListItemLine>{{ model.type ?? 'N/A' }}, {{ model.baseModel ?? 'N/A' }}</span>
+    </mat-list-item>
+  }
+</mat-list>
+
+<h3>Parameters</h3>
+<table>
+  <tbody>
+  <tr>
+    <td class="header-column">Sampler</td>
+    <td>{{ product().samplerName ?? "N/A" }}</td>
+  </tr>
+  <tr>
+    <td class="header-column">Scheduler</td>
+    <td>{{ product().schedulerName ?? "N/A" }}</td>
+  </tr>
+  <tr>
+    <td class="header-column">Steps</td>
+    <td>{{ product().stepCount ?? "N/A" }}</td>
+  </tr>
+  <tr>
+    <td class="header-column">CFG</td>
+    <td>{{ product().cfgScale ?? "N/A" }}</td>
+  </tr>
+  <tr>
+    <td class="header-column">Seed</td>
+    <td>{{ product().seed ?? "N/A" }}</td>
+  </tr>
+  </tbody>
+</table>
