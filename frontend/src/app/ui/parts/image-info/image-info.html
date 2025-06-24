@@ -1,0 +1,61 @@
+@let loadedProduct = product();
+
+<h3>Prompts</h3>
+@if (loadedProduct.positivePrompt) {
+
+  <h4>Positive</h4>
+  <pre>{{ loadedProduct.positivePrompt }}</pre>
+  <button matButton type="button" (click)="copyPositivePrompt(loadedProduct.positivePrompt)">
+    <mat-icon>content_copy</mat-icon>
+    Copy positive prompt
+  </button>
+}
+
+@if (loadedProduct.negativePrompt) {
+  <h4>Negative</h4>
+  <pre>{{ loadedProduct.negativePrompt }}</pre>
+  <button matButton type="button" (click)="copyNegativePrompt(loadedProduct.negativePrompt)">
+    <mat-icon>content_copy</mat-icon>
+    Copy negative prompt
+  </button>
+}
+
+<mat-divider></mat-divider>
+
+<h3>Models</h3>
+<mat-list>
+  @for (model of loadedProduct.models; track model.id) {
+    <mat-list-item>
+      <span matListItemTitle>{{ model.name }}</span>
+      <span matListItemLine>{{ model.type ?? 'N/A' }}, {{ model.baseModel ?? 'N/A' }}</span>
+    </mat-list-item>
+  }
+</mat-list>
+
+<mat-divider></mat-divider>
+
+<h3>Parameters</h3>
+<table>
+  <tbody>
+  <tr>
+    <td class="header-column">Sampler</td>
+    <td>{{ product().samplerName ?? "N/A" }}</td>
+  </tr>
+  <tr>
+    <td class="header-column">Scheduler</td>
+    <td>{{ loadedProduct.schedulerName ?? "N/A" }}</td>
+  </tr>
+  <tr>
+    <td class="header-column">Steps</td>
+    <td>{{ loadedProduct.stepCount ?? "N/A" }}</td>
+  </tr>
+  <tr>
+    <td class="header-column">CFG</td>
+    <td>{{ loadedProduct.cfgScale ?? "N/A" }}</td>
+  </tr>
+  <tr>
+    <td class="header-column">Seed</td>
+    <td>{{ loadedProduct.seed ?? "N/A" }}</td>
+  </tr>
+  </tbody>
+</table>

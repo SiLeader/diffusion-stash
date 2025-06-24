@@ -1,6 +1,6 @@
 @let loadedModel = model.value();
 @if (loadedModel) {
-  <div [class]="containerClass" (window:resize)="onResize($event)">
+  <div class="container">
     <h2>{{ loadedModel.name }}</h2>
     <div class="img-container">
       <img mat-card-image

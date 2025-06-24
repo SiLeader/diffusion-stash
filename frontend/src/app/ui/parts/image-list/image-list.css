@@ -4,4 +4,38 @@
   height: auto;
   object-fit: contain;
   margin: 4px;
+  display: block;
+}
+
+.masonry-container {
+  margin: 0 auto;
+  position: relative;
+  width: 100%;
+}
+
+.grid-item {
+  width: calc(25% - 9px);
+}
+
+.image-item {
+  width: calc(25% - 9px);
+  margin-bottom: 12px;
+}
+
+@media (max-width: 1200px) {
+  .grid-item, .image-item {
+    width: calc(33.333% - 8px);
+  }
+}
+
+@media (max-width: 768px) {
+  .grid-item, .image-item {
+    width: calc(50% - 6px);
+  }
+}
+
+@media (max-width: 576px) {
+  .grid-item, .image-item {
+    width: 100%;
+  }
 }
