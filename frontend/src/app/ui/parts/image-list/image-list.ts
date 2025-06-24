@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, effect, input, output, ViewChild} from '@angular/core';
+import {Component, effect, input, output, ViewChild} from '@angular/core';
 import {RouterLink} from '@angular/router';
 import {Product} from '../../../apis/data/product';
 import {ProductContentPipe} from '../../pipe/product-content-pipe';
@@ -17,33 +17,30 @@ import {NgxMasonryComponent, NgxMasonryModule, NgxMasonryOptions} from 'ngx-maso
   styleUrl: './image-list.css'
 })
 export class ImageList {
-  constructor(cdr: ChangeDetectorRef) {
+  constructor() {
     effect(() => {
       const products = this.products();
-      const total = this.total();
       if (products) {
-        this.updateTrigger = !this.updateTrigger;
-        cdr.detectChanges();
-        this.updateTrigger = !this.updateTrigger;
-        if (products.length === total) {
-          this.masonry.layout();
-        }
+        setTimeout(() => {
+          if (this.masonry) {
+            console.log(products);
+            this.masonry.layout();
+          }
+        }, 2000);
       }
     });
   }
 
-  @ViewChild(NgxMasonryComponent) masonry!: NgxMasonryComponent;
+  @ViewChild(NgxMasonryComponent) masonry?: NgxMasonryComponent;
 
   total = input.required<number>();
   products = input.required<Product[]>();
-
-  updateTrigger = false;
 
   bottomReach = output();
 
   masonryOptions: NgxMasonryOptions = {
     itemSelector: '.image-item',
-    columnWidth: '.image-item',
+    columnWidth: '.grid-item',
     horizontalOrder: true,
     percentPosition: true,
     animations: {},

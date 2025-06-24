@@ -10,22 +10,28 @@
   margin: 4px;
 }
 
-.container-lg {
+.img-container {
+  text-align: center;
+}
+
+.container {
   padding: 0 20%;
 }
 
-.container-md {
-  padding: 0 10%;
+@media (max-width: 1200px) {
+  .container {
+    padding: 0 10%;
+  }
 }
 
-.container-sm {
-  padding: 0 5%;
+@media (max-width: 768px) {
+  .container {
+    padding: 0 5%;
+  }
 }
 
-.container-xs {
-  padding: 0 2%;
-}
-
-.img-container {
-  text-align: center;
+@media (max-width: 576px) {
+  .container {
+    padding: 0 2%;
+  }
 }

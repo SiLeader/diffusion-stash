@@ -12,3 +12,8 @@ td {
   border: 1px solid #888888;
   padding: 16px 12px;
 }
+
+pre {
+  font-size: 1.2rem;
+  text-wrap: wrap;
+}

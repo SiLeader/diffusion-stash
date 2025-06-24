@@ -5,3 +5,29 @@
   height: auto;
   object-fit: contain;
 }
+
+.img-container {
+  text-align: center;
+}
+
+.container {
+  padding: 0 20%;
+}
+
+@media (max-width: 1200px) {
+  .container {
+    padding: 0 10%;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 5%;
+  }
+}
+
+@media (max-width: 576px) {
+  .container {
+    padding: 0 2%;
+  }
+}

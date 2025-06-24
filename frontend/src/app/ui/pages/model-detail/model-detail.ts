@@ -1,4 +1,4 @@
-import {Component, effect, OnInit, Resource} from '@angular/core';
+import {Component, effect, Resource} from '@angular/core';
 import {Model} from '../../../apis/data/model';
 import {ActivatedRoute} from '@angular/router';
 import {map} from 'rxjs';
@@ -29,7 +29,7 @@ import {toSignal} from '@angular/core/rxjs-interop';
   templateUrl: './model-detail.html',
   styleUrl: './model-detail.css'
 })
-export class ModelDetail implements OnInit {
+export class ModelDetail {
   constructor(route: ActivatedRoute, modelRepository: ModelRepository, title: Title) {
     const id = toSignal(route.params.pipe(map(params => params['id'])));
     this.model = modelRepository.fetchById(id);
@@ -38,28 +38,6 @@ export class ModelDetail implements OnInit {
     effect(() => {
       title.setTitle(`${this.model.value()?.name} - Diffusion Stash`);
     });
-  }
-
-  containerClass = 'container-xs';
-
-  ngOnInit() {
-    this.setContainerClass(window.innerWidth);
-  }
-
-  onResize(event: Event) {
-    this.setContainerClass((<any>event.target).innerWidth);
-  }
-
-  setContainerClass(width: number) {
-    if (width <= 600) {
-      this.containerClass = 'container-xs';
-    } else if (width <= 960) {
-      this.containerClass = 'container-sm';
-    } else if (width <= 1280) {
-      this.containerClass = 'container-md';
-    } else {
-      this.containerClass = 'container-lg';
-    }
   }
 
   model: Resource<Model | null>;

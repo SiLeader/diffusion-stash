@@ -5,18 +5,18 @@
   <ngx-masonry
     [options]="masonryOptions"
     [ordered]="true"
-    [updateLayout]="updateTrigger"
     class="masonry-container"
     infiniteScroll
     [infiniteScrollDistance]="2"
     [infiniteScrollThrottle]="50"
     (scrolled)="bottomReach.emit()">
+    <div class="grid-item"></div>
     @for (product of products(); track product.id) {
-      <ngxMasonryItem class="image-item">
+      <div ngxMasonryItem class="image-item">
         <a [routerLink]="'/products/' + product.id">
-          <img class="image" loading="lazy" [src]="product | productContent" alt="{{ product.name }}">
+          <img class="image" [src]="product | productContent" alt="{{ product.name }}">
         </a>
-      </ngxMasonryItem>
+      </div>
     } @empty {
       <p>No products found.</p>
     }

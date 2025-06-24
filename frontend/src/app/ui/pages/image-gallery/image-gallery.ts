@@ -24,7 +24,11 @@ export class ImageGallery {
   constructor(route: ActivatedRoute, productRepository: ProductRepository, modelRepository: ModelRepository, title: Title) {
     title.setTitle('Image Gallery - Diffusion Stash');
     route.params.pipe(map(params => params['id'])).subscribe(async id => {
-      this.model.set(await modelRepository.fetchByIdAsync(id));
+      if (id) {
+        this.model.set(await modelRepository.fetchByIdAsync(id));
+      } else {
+        this.model.set(null);
+      }
     })
 
     effect(() => {
