@@ -28,7 +28,8 @@ export class ImageDetail {
     this.product = productRepository.fetchById(id);
     title.setTitle('Image Detail - Diffusion Stash');
     effect(() => {
-      title.setTitle(`${this.product.value()?.name} - Diffusion Stash`);
+      const name = this.product.value()?.name ?? 'Image Detail';
+      title.setTitle(`${name} - Diffusion Stash`);
     });
   }
 

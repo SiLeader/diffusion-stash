@@ -80,7 +80,7 @@ pub struct GeneratedProduct {
     pub scheduler_name: Option<String>,
     pub step_count: Option<i32>,
     pub cfg_scale: Option<f32>,
-    pub seed: Option<i32>,
+    pub seed: Option<i64>,
     pub created_at: DateTimeUtc,
     pub updated_at: DateTimeUtc,
 }

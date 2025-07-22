@@ -17,7 +17,7 @@ pub struct Model {
     pub step_count: Option<i32>,
     #[sea_orm(column_type = "Float", nullable)]
     pub cfg_scale: Option<f32>,
-    pub seed: Option<i32>,
+    pub seed: Option<i64>,
     pub created_at: DateTime,
     pub updated_at: DateTime,
 }

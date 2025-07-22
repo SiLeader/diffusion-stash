@@ -1,6 +1,7 @@
 mod config;
 
 use crate::config::Config;
+use actix_cors::Cors;
 use actix_web::middleware::Logger;
 use actix_web::{App, HttpServer};
 use clap::Parser;
@@ -37,9 +38,18 @@ async fn main() {
 
     let server = DiffusionStashServer::new(database, storage);
 
+    let cors = config.server.cors;
+
     HttpServer::new(move || {
         App::new()
             .wrap(Logger::default())
+            .wrap({
+                let mut c = Cors::default();
+                for ah in &cors.allow_origins {
+                    c = c.allowed_origin(&ah);
+                }
+                c
+            })
             .configure(|c| server.register(c))
     })
     .bind(&config.server.listen)

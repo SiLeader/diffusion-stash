@@ -10,6 +10,7 @@ import {HttpEventType, HttpUploadProgressEvent} from '@angular/common/http';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {ModelCategoryProvider} from '../../../apis/repositories/model-category-provider';
 import {SelectOption} from '../../../apis/data/model-category';
+import {Title} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-upload-model',
@@ -32,8 +33,10 @@ export class UploadModel {
   constructor(
     private modelRepository: ModelRepository,
     private snackBar: MatSnackBar,
-    modelCategoryProvider: ModelCategoryProvider
+    modelCategoryProvider: ModelCategoryProvider,
+    title: Title
   ) {
+    title.setTitle('Upload Model - Diffusion Stash');
     this.selectableTypes = modelCategoryProvider.fetchSelectableModelTypes(modelCategoryProvider.fetchModelTypes());
     this.selectableBaseModels = modelCategoryProvider.fetchSelectableBaseModels(modelCategoryProvider.fetchBaseModels());
   }
@@ -43,6 +46,11 @@ export class UploadModel {
 
   progress: number | null = null;
   selectedFile: File | null = null;
+
+  onClear(form: NgForm) {
+    this.selectedFile = null;
+    form.resetForm();
+  }
 
   onSubmit(form: NgForm) {
     if (form.invalid || !this.selectedFile) {
@@ -67,7 +75,8 @@ export class UploadModel {
         this.progress = Math.round(100 * e.loaded / (e.total || 100));
       } else if (event.type === HttpEventType.Response) {
         this.progress = null;
-        this.snackBar.open('Model uploaded successfully', 'OK');
+        this.snackBar.open(`Model '${form.value.name}' was uploaded successfully`, 'OK');
+        this.onClear(form);
       }
     });
   }
