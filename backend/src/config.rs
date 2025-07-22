@@ -21,6 +21,15 @@ pub(crate) struct Config {
 #[serde(rename_all = "camelCase")]
 pub(crate) struct ServerConfig {
     pub listen: String,
+    #[serde(default)]
+    pub cors: CorsConfig,
+}
+
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) struct CorsConfig {
+    #[serde(default)]
+    pub allow_origins: Vec<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

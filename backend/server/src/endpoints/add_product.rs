@@ -79,7 +79,7 @@ pub(super) async fn handle_add_product(
         seed: request
             .seed
             .into_null_if_empty()
-            .and_then(|s| s.parse::<i32>().ok()),
+            .and_then(|s| s.parse::<i64>().ok()),
         created_at: Utc::now(),
         updated_at: Utc::now(),
     };

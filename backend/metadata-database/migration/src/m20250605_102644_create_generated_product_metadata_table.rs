@@ -20,7 +20,7 @@ impl MigrationTrait for Migration {
                     .col(string_null(GeneratedProduct::SchedulerName))
                     .col(integer_null(GeneratedProduct::StepCount))
                     .col(float_null(GeneratedProduct::CfgScale))
-                    .col(integer_null(GeneratedProduct::Seed))
+                    .col(big_unsigned_null(GeneratedProduct::Seed))
                     .col(timestamp(GeneratedProduct::CreatedAt))
                     .col(timestamp(GeneratedProduct::UpdatedAt))
                     .to_owned(),

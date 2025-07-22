@@ -36,7 +36,8 @@ export class ModelDetail {
     title.setTitle('Model Detail - Diffusion Stash');
 
     effect(() => {
-      title.setTitle(`${this.model.value()?.name} - Diffusion Stash`);
+      const name = this.model.value()?.name ?? 'Model Detail';
+      title.setTitle(`${name} - Diffusion Stash`);
     });
   }
 

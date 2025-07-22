@@ -11,6 +11,7 @@ import {firstValueFrom} from 'rxjs';
 import {Model} from '../../../apis/data/model';
 import {MatList, MatListItem} from '@angular/material/list';
 import {ModelSelector} from '../../parts/model-selector/model-selector';
+import {Title} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-upload-image',
@@ -34,7 +35,9 @@ export class UploadImage {
   constructor(
     private productRepository: ProductRepository,
     private snackBar: MatSnackBar,
+    title: Title,
   ) {
+    title.setTitle('Upload Image - Diffusion Stash');
   }
 
   selectedFile: File | null = null;
@@ -42,8 +45,16 @@ export class UploadImage {
   models = signal<(Model | null)[]>([]);
   unresolvedModels: string[] = [];
 
+  onClear(form: NgForm) {
+    this.selectedFile = null;
+    form.resetForm();
+    this.models.set([]);
+    this.unresolvedModels = [];
+  }
+
   async onSubmit(form: NgForm) {
-    if (!this.selectedFile) {
+    const selectedFile = this.selectedFile;
+    if (!selectedFile) {
       this.snackBar.open('Please select a file', 'OK');
       return;
     }
@@ -52,7 +63,7 @@ export class UploadImage {
 
     try {
       const formData = new FormData();
-      formData.append("file", this.selectedFile);
+      formData.append("file", selectedFile);
       formData.append("positive_prompt", form.value.positive_prompt);
       formData.append("negative_prompt", form.value.negative_prompt);
       formData.append("sampler_name", form.value.sampler_name);
@@ -67,7 +78,8 @@ export class UploadImage {
       }
 
       await firstValueFrom(this.productRepository.upload(formData));
-      this.snackBar.open('Image uploaded successfully', 'OK');
+      this.snackBar.open(`Image '${selectedFile.name}' was uploaded successfully`, 'OK');
+      this.onClear(form);
     } catch {
       this.snackBar.open('Image upload failed', 'OK');
     } finally {
