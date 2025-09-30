@@ -12,7 +12,7 @@ png-workflow = { path = "png-workflow" }
 
 migration = { path = "metadata-database/migration" }
 
-async-trait = "0.1.88"
+async-trait = "0.1.89"
 tokio = "1.47.1"
 
 actix-web = "4.11.0"
