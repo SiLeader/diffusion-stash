@@ -27,7 +27,7 @@ async fn main() {
     let args = Args::parse();
     debug!("Command line arguments: {:?}", args);
 
-    let config = Config::from_yaml(&args.config);
+    let config = Config::from_toml(&args.config);
 
     let storage = DataStorage::new(
         config.storage.backend.create_storage(),

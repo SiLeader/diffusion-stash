@@ -1,0 +1,27 @@
+[server]
+listen = "127.0.0.1:8000"
+cors.allow_origins = ["http://localhost:4200"]
+
+[storage.backend]
+provider = "Local"
+
+[storage.model_path]
+provider = "ComfyUI"
+root = "./sample-data/models"
+
+[storage.model_path.directory]
+stable_diffusion15 = "sd1.5"
+stable_diffusion_xl = "sdxl"
+pony_diffusion = "pony"
+illustrious = "illustrious"
+stable_diffusion30 = "sd3"
+stable_diffusion35 = "sd3.5"
+flux1d = "flux.1"
+flux1s = "flux.1"
+
+[storage.product_path]
+provider = "FileName"
+base = "./sample-sata/products"
+
+[database]
+url = "sqlite://./sample-data/database.db"

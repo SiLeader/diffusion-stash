@@ -4,13 +4,11 @@ use server::path::{
     ComfyUiPathProvider, FlatFileNamePathProvider, FlatIdPathProvider, PathProvider,
 };
 use std::collections::HashMap;
-use std::fs::File;
 use std::sync::Arc;
 use storage::Storage;
 use storage::local::LocalStorage;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub(crate) struct Config {
     pub server: ServerConfig,
     pub storage: StorageConfig,
@@ -18,7 +16,6 @@ pub(crate) struct Config {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub(crate) struct ServerConfig {
     pub listen: String,
     #[serde(default)]
@@ -26,20 +23,17 @@ pub(crate) struct ServerConfig {
 }
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub(crate) struct CorsConfig {
     #[serde(default)]
     pub allow_origins: Vec<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub(crate) struct DatabaseConfig {
     pub url: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub(crate) struct StorageConfig {
     #[serde(default)]
     pub backend: StorageBackend,
@@ -59,8 +53,8 @@ pub(crate) enum StorageBackend {
 pub(crate) enum PathProviderConfig {
     ComfyUI {
         root: String,
-        #[serde(default, rename = "modelTypeDirectory")]
-        model_type_directory: Option<HashMap<ModelBase, String>>,
+        #[serde(default, rename = "directory")]
+        directory: Option<HashMap<ModelType, String>>,
     },
     FileName {
         base: String,
@@ -70,22 +64,38 @@ pub(crate) enum PathProviderConfig {
     },
 }
 
+#[derive(Debug, Clone, Copy, Hash, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub(crate) enum ModelType {
+    StableDiffusion15,
+    StableDiffusionXl,
+    PonyDiffusion,
+    Illustrious,
+    StableDiffusion30,
+    StableDiffusion35,
+    #[serde(rename = "flux1d")]
+    Flux1D,
+    #[serde(rename = "flux1s")]
+    Flux1S,
+}
+
 impl Config {
-    pub(crate) fn from_yaml(path: &str) -> Config {
-        let file = File::open(path).unwrap();
-        serde_yml::from_reader(file).unwrap()
+    pub(crate) fn from_toml(path: &str) -> Config {
+        let content = std::fs::read_to_string(path).unwrap();
+        toml::from_str(&content).expect("Failed to parse config")
     }
 }
 
 impl PathProviderConfig {
     pub(crate) fn create_model_path_provider(&self) -> Arc<dyn PathProvider<Model>> {
         match self {
-            PathProviderConfig::ComfyUI {
-                root,
-                model_type_directory,
-            } => Arc::new(ComfyUiPathProvider::new(
+            PathProviderConfig::ComfyUI { root, directory } => Arc::new(ComfyUiPathProvider::new(
                 root.parse().unwrap(),
-                model_type_directory.clone(),
+                directory.clone().map(|d| {
+                    d.into_iter()
+                        .map(|(t, d)| (ModelBase::from(t), d.clone()))
+                        .collect()
+                }),
             )),
             PathProviderConfig::FileName { base } => {
                 Arc::new(FlatFileNamePathProvider::new(base.parse().unwrap()))
@@ -115,6 +125,21 @@ impl StorageBackend {
     pub(crate) fn create_storage(&self) -> Arc<dyn Storage + Send + Sync> {
         match self {
             StorageBackend::Local => Arc::new(LocalStorage),
+        }
+    }
+}
+
+impl From<ModelType> for ModelBase {
+    fn from(value: ModelType) -> Self {
+        match value {
+            ModelType::StableDiffusion15 => ModelBase::StableDiffusion15,
+            ModelType::StableDiffusionXl => ModelBase::StableDiffusionXl,
+            ModelType::PonyDiffusion => ModelBase::PonyDiffusion,
+            ModelType::Illustrious => ModelBase::Illustrious,
+            ModelType::StableDiffusion30 => ModelBase::StableDiffusion30,
+            ModelType::StableDiffusion35 => ModelBase::StableDiffusion35,
+            ModelType::Flux1D => ModelBase::Flux1D,
+            ModelType::Flux1S => ModelBase::Flux1S,
         }
     }
 }
