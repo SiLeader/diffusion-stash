@@ -61,8 +61,8 @@ importers:
         specifier: ^20.3.1
         version: 20.3.1(@angular/compiler@20.3.1)(typescript@5.9.2)
       '@types/jasmine':
-        specifier: ~5.1.9
-        version: 5.1.9
+        specifier: ~5.1.10
+        version: 5.1.10
       jasmine-core:
         specifier: ~5.10.0
         version: 5.10.0
@@ -1303,8 +1303,8 @@ packages:
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
 
-  '@types/jasmine@5.1.9':
-    resolution: {integrity: sha512-8t4HtkW4wxiPVedMpeZ63n3vlWxEIquo/zc1Tm8ElU+SqVV7+D3Na2PWaJUp179AzTragMWVwkMv7mvty0NfyQ==}
+  '@types/jasmine@5.1.10':
+    resolution: {integrity: sha512-ctILpOSFD58PTyGwr400GadefIHPqdWQ8VlZI9D65USOWR/aIw8dkDAw17KPCu/Wn+e+r9BWpPtmuB5T/pP8ng==}
 
   '@types/node@24.5.2':
     resolution: {integrity: sha512-FYxk1I7wPv3K2XBaoyH2cTnocQEu8AOZ60hPbsyukMPLv5/5qr7V1i8PLHdl6Zf87I+xZXFvPCXYjiTFq+YSDQ==}
@@ -4122,7 +4122,7 @@ snapshots:
 
   '@types/estree@1.0.8': {}
 
-  '@types/jasmine@5.1.9': {}
+  '@types/jasmine@5.1.10': {}
 
   '@types/node@24.5.2':
     dependencies:
