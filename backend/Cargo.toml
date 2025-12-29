@@ -15,7 +15,7 @@ migration = { path = "metadata-database/migration" }
 async-trait = "0.1.89"
 tokio = "1.48.0"
 
-actix-web = "4.11.0"
+actix-web = "4.12.1"
 actix-multipart = "0.7.2"
 actix-cors = "0.7.1"
 
