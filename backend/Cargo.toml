@@ -25,7 +25,7 @@ thiserror = "2.0.17"
 
 serde = "1.0.219"
 serde_json = "1.0.145"
-toml = "0.9.8"
+toml = "0.9.11"
 
 regex = "1.12.2"
 
