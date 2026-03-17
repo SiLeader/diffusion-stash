@@ -37,7 +37,7 @@ env_logger = "0.11.8"
 
 clap = "4.5.54"
 
-png = "0.18.0"
+png = "0.18.1"
 
 [package]
 name = "diffusionstash-backend"
