@@ -11,9 +11,25 @@ updates:
       interval: "daily"
     cooldown:
       default-days: 30
+    groups:
+      minor-and-patch:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
   - package-ecosystem: "cargo"
     directory: "/backend"
     schedule:
       interval: "daily"
     cooldown:
       default-days: 30
+    groups:
+      minor-and-patch:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
