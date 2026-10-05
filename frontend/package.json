@@ -20,7 +20,7 @@
     "@angular/forms": "^21.1.4",
     "@angular/material": "^21.1.4",
     "@angular/platform-browser": "^21.1.4",
-    "@angular/router": "^21.1.4",
+    "@angular/router": "^21.2.24",
     "ngx-infinite-scroll": "^21.0.0",
     "ngx-masonry": "^14.0.1",
     "rxjs": "~7.8.2",
