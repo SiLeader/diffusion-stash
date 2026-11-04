@@ -17,7 +17,7 @@
     "@angular/common": "^21.2.20",
     "@angular/compiler": "^21.2.20",
     "@angular/core": "^21.2.20",
-    "@angular/forms": "^22.1.7",
+    "@angular/forms": "^22.2.1",
     "@angular/material": "^21.1.4",
     "@angular/platform-browser": "^21.1.4",
     "@angular/router": "^22.2.1",
@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@angular/build": "^21.1.4",
-    "@angular/cli": "^22.1.8",
+    "@angular/cli": "^22.2.1",
     "@angular/compiler-cli": "^21.2.20",
     "@types/jasmine": "~6.0.0",
     "jasmine-core": "~6.3.0",
